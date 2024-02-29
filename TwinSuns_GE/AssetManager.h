@@ -21,8 +21,7 @@ public:
 	SDL_Texture* GetTexture(std::string id);
 
 	// Functions
-	void CreateProjectile(Vector2D crosshairPos, Vector2D laserPos, int range, int speed, std::string id);
-	void SpawnEnemyWomp(Vector2D pos, Vector2D vel, int speed, std::string id);
+	
 
 private:
 

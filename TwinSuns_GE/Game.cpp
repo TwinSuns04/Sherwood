@@ -21,6 +21,7 @@ SDL_Rect Game::camera = { 0, 0, 640, 640 };
 bool Game::isRunning = false;
 
 // Create and add entities
+auto& backgroundScene(manager.AddEntity());
 
 
 Game::Game()
@@ -67,7 +68,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 		renderer = SDL_CreateRenderer(window, -1, 0);
 		if (renderer)
 		{
-			SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255);
+			SDL_SetRenderDrawColor(renderer, 71, 135, 120, 255);
 
 			std::cout << "Renderer Created" << std::endl;
 
@@ -90,17 +91,27 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	}
 
 	// Add textures to asset manager / texture library
-	//assets->AddTexture("collision border", "Assets/collisionBorder.png");
+	assets->AddTexture("PrologueScene", "Assets/RobinAndTheRangerv001.png");
 
 	map = new TextureMap();
 
 	// Load Map
 	//TextureMap::LoadTextureMap("Assets/CanyonRun16x16.map", 16, 16);
 	
+#pragma region ComponentCreation
+
+// Create canyon background object
+	backgroundScene.addComponent<TransformComponent>(0.0f, 0.0f, 1600, 1000, 1);
+	backgroundScene.addComponent<SpriteComponent>("PrologueScene");
+	backgroundScene.AddGroup(groupScenes);
+
+#pragma endregion ComponentCreation
 	
 }
 
-// create lists of group objects
+// Create lists of group objects, using AssetManager Class,
+// by getting all objects with desired 'label'
+auto& scenes(manager.GetGroup(Game::groupScenes));
 
 // Handle SDL events
 void Game::HandleEvents()
@@ -151,7 +162,10 @@ void Game::Render()
 	SDL_RenderClear(renderer);
 
 	// using painters algorithm, items on screen go back to front
-	
+	for (auto& s : scenes)
+	{
+		s->Draw();
+	}
 	
 	SDL_RenderPresent(renderer);
 }

@@ -95,12 +95,20 @@ public:
 		std::cout << "Entity Destroyed" << std::endl;
 	}
 
+	void ClearComponents()
+	{
+		components.clear();
+		//componentArray.empty();
+		componentBitSet.reset();
+	}
+
 	bool HasGroup(Group mGroup)
 	{
 		return groupBitset[mGroup];
 	}
 
 	void AddGroup(Group mGroup);
+
 	void RemoveGroup(Group mGroup)
 	{
 		groupBitset[mGroup] = false;

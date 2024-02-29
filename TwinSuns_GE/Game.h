@@ -52,7 +52,8 @@ public:
 
 	enum groupLabels : std::size_t
 	{
-		
+		groupScenes,
+		groupColliders,
 	};
 
 	// Additional Functions

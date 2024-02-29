@@ -133,6 +133,7 @@
     <ClCompile Include="AdvancedTimer.cpp" />
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="ECS\ECS.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="LaserObject.cpp" />

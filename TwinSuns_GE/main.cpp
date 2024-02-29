@@ -1,5 +1,8 @@
 // TwinSuns 2D - Game Engine
 
+// Robin Hood Point and Click Adventure
+// Based on the novel 'The Merry Adventures of Robin Hood' by Howard Pyle
+
 #include "SDL.h"
 #include <iostream>
 #include "Game.h"
@@ -21,7 +24,7 @@ int main(int argc, char* args[])
 
 	game = new Game();
 
-	game->Init("TwinSuns Game Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 640, false);
+	game->Init("TwinSuns Game Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 1000, false);
 
 	while (game->Running())
 	{
