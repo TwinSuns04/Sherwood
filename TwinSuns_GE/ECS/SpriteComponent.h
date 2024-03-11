@@ -1,4 +1,4 @@
-// Responsible for drawing sprites to screen
+// Responsible for drawing sprites to screen and managing sprite assignment
 
 #pragma once
 
@@ -61,9 +61,7 @@ public:
 	}
 
 	~SpriteComponent()
-	{
-		
-	}
+	{}
 
 	void Init() override
 	{
@@ -108,6 +106,11 @@ public:
 	void SetNewTexture(std::string id)
 	{
 		texture = Game::assets->GetTexture(id);
+	}
+
+	SDL_Texture* GetTexture()
+	{
+		return texture;
 	}
 
 	// use to change index and frame
