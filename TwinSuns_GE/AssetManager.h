@@ -26,8 +26,9 @@ public:
 	TTF_Font* GetFont(std::string id);
 
 	// Functions
-	void CreatePuzzlePiece(std::string id, std::vector<int> trans,
-		std::vector<std::string> dependencies);
+	void CreatePuzzlePiece(std::string id, bool last, int part, std::string scene,
+		std::vector<int> trans, std::vector<std::string> dependencies);
+
 	Entity* GetPuzzlePiece(std::string ID);
 
 private:

@@ -31,7 +31,7 @@ public:
 			switch (Game::event.button.button)
 			{
 			case SDL_BUTTON_LEFT:
-				std::cout << "Left Click" << std::endl;
+				//std::cout << "Left Click" << std::endl;
 				if (gameMode->PuzzleCollisionCheck())
 				{
 					std::cout << "Puzzle Piece Clicked" << std::endl;
@@ -40,7 +40,7 @@ public:
 				break;
 
 			case SDL_BUTTON_RIGHT:
-				std::cout << "Right Click" << std::endl;
+				//std::cout << "Right Click" << std::endl;
 				break;
 
 			default:

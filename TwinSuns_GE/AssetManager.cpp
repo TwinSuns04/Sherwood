@@ -33,8 +33,8 @@ TTF_Font* AssetManager::GetFont(std::string id)
 }
 
 // Create individual puzzle pieces
-void AssetManager::CreatePuzzlePiece(std::string id, std::vector<int> trans,
-	std::vector<std::string> dependencies)
+void AssetManager::CreatePuzzlePiece(std::string id, bool last, int part, std::string scene,
+	std::vector<int> trans, std::vector<std::string> dependencies)
 {
 	numPP++;
 	auto& puzzlePiece(manager->AddEntity());
@@ -42,7 +42,7 @@ void AssetManager::CreatePuzzlePiece(std::string id, std::vector<int> trans,
 		static_cast<float> (trans[1]), trans[2], trans[3], trans[4]);
 	puzzlePiece.addComponent<SpriteComponent>(id);
 	puzzlePiece.addComponent<CollisionComponent>(id);
-	puzzlePiece.addComponent<PuzzlePieceComponent>(id);
+	puzzlePiece.addComponent<PuzzlePieceComponent>(id, last, part, scene);
 	puzzlePiece.AddGroup(Game::groupPuzzlePieces);
 	puzzlePieceMap.emplace(id, &puzzlePiece);
 

@@ -8,18 +8,18 @@ PuzzleSystem::PuzzleSystem()
 	puzzleStatus = false;
 }
 
-PuzzleSystem::PuzzleSystem(bool status)
-{
-	puzzleStatus = status;
-}
-
 PuzzleSystem::~PuzzleSystem()
 {}
 
 void PuzzleSystem::CreateEntities()
 {
-	Game::assets->CreatePuzzlePiece(puzzlePieceOne.puzzleID, puzzlePieceOne.transform, puzzlePieceOne.dependencies);
-	Game::assets->CreatePuzzlePiece(puzzlePieceTwo.puzzleID, puzzlePieceTwo.transform, puzzlePieceTwo.dependencies);
+	Game::assets->CreatePuzzlePiece(puzzlePieceOne.puzzleID, puzzlePieceOne.lastPiece,
+		puzzlePieceOne.storyPart, puzzlePieceOne.storyScene,
+		puzzlePieceOne.transform, puzzlePieceOne.dependencies);
+
+	Game::assets->CreatePuzzlePiece(puzzlePieceTwo.puzzleID, puzzlePieceTwo.lastPiece, 
+		puzzlePieceTwo.storyPart, puzzlePieceTwo.storyScene,
+		puzzlePieceTwo.transform, puzzlePieceTwo.dependencies);
 }
 
 bool PuzzleSystem::CheckPuzzleStatus()

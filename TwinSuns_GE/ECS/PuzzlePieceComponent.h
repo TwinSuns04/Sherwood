@@ -14,9 +14,13 @@ class PuzzlePieceComponent : public Component
 {
 private:
 
+	GameMode* gameMode = new GameMode();
+
 	// vars
 	bool clickStatus;
 	bool bUsed;
+	int storyPart;
+	std::string storyScene;
 
 	std::vector<std::string> dependentVector;
 
@@ -27,6 +31,7 @@ public:
 
 	// vars
 	std::string pieceName;
+	bool lastPiece; // Track if a puzzle piece is the last piece of its puzzle system
 
 	PuzzlePieceComponent()
 	{}
@@ -34,6 +39,15 @@ public:
 	PuzzlePieceComponent(std::string id)
 	{
 		pieceName = id;
+		lastPiece = false; // if not specified, piece is assumed to not be final piece
+	}
+
+	PuzzlePieceComponent(std::string id, bool last, int part, std::string scene)
+	{
+		pieceName = id;
+		lastPiece = last;
+		storyPart = part;
+		storyScene = scene;
 	}
 
 	~PuzzlePieceComponent()
@@ -57,6 +71,16 @@ public:
 		}
 
 		std::cout << "bUsed: " << GetbUsed() << std::endl;
+
+		// If the puzzle piece has been properly used
+		// and is the last piece
+		if (bUsed && lastPiece)
+		{
+			std::cout << "PuzzlePiece used and is last piece" << "\n" << std::endl;
+
+			// call appropriate function in GameMode class, pass part and scene
+			gameMode->ManageStoryPart(storyPart, storyScene);
+		}
 		
 	}
 
@@ -75,6 +99,16 @@ public:
 		return bUsed;
 	}
 
+	void SetLastPiece(bool last)
+	{
+		lastPiece = last;
+	}
+
+	bool GetLastPiece()
+	{
+		return lastPiece;
+	}
+
 	void CreateDependencies(std::string dependentID)
 	{
 		std::cout << "CreateDependencies() exec" << std::endl;
@@ -87,7 +121,7 @@ public:
 	bool CheckDependencies()
 	{
 		std::cout << "CheckDependencies() exec" << std::endl;
-		std::cout << "PuzzlePieceID: " << pieceName << "\n" << std::endl;
+		std::cout << "PuzzlePieceID: " << pieceName << std::endl;
 
 		// Check if puzzlePiece is dependent
 		if (dependentVector.size() != 0)

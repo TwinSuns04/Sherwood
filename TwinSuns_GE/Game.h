@@ -82,8 +82,15 @@ public:
 	GameMode();
 	~GameMode();
 
-// Functions
+// Member Functions
 #pragma region Functions
+
+	void SetStoryPart(int part);
+	int GetStoryPart();
+	void ManageStoryPart(int part, std::string scene);
+
+	void SetStoryPartScene(std::string scene);
+	std::string GetStoryPartScene();
 
 	bool PuzzleCollisionCheck();
 	void PuzzlePieceInteraction();
@@ -104,7 +111,7 @@ public:
 #pragma endregion Functions
 
 	
-	// Entities
+	// Objects
 	SDL_Texture* textTexture = nullptr;
 	SDL_Rect textRect;
 

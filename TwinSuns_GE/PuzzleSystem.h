@@ -9,14 +9,15 @@ class PuzzleSystem
 {
 private:
 
+	int totalNumPP; // Track if a puzzle piece is the last piece of its puzzle
 	int puzzleSysID; // Track number of puzzle pieces, each pp is an entity
-	bool puzzleStatus;
+	bool puzzleStatus; // Track if puzzle is solved
 
 public:
 
 	// Constructors and Destructors
 	PuzzleSystem();
-	PuzzleSystem(bool status);
+	PuzzleSystem(int totalPP, bool status);
 	~PuzzleSystem();
 
 	// Member Functions
@@ -33,6 +34,7 @@ public:
 		std::string puzzleID;
 		int storyPart;
 		std::string storyScene;
+		bool lastPiece;
 		std::vector<int> transform;
 		std::vector<std::string> dependencies;
 	}puzzlePieceOne, puzzlePieceTwo;

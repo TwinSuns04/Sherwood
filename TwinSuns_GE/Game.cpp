@@ -158,12 +158,14 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	puzzleSysZero->puzzlePieceOne.puzzleID = "ArrowQuiver";
 	puzzleSysZero->puzzlePieceOne.storyPart = 0;
 	puzzleSysZero->puzzlePieceOne.storyScene = "Prologue";
+	puzzleSysZero->puzzlePieceOne.lastPiece = false;
 	puzzleSysZero->puzzlePieceOne.transform = std::vector<int>{ 500, 600, 200, 200, 1 };
 	puzzleSysZero->puzzlePieceOne.dependencies = {};
 
 	puzzleSysZero->puzzlePieceTwo.puzzleID = "DeerHeart";
 	puzzleSysZero->puzzlePieceTwo.storyPart = 0;
 	puzzleSysZero->puzzlePieceTwo.storyScene = "Prologue";
+	puzzleSysZero->puzzlePieceTwo.lastPiece = true;
 	puzzleSysZero->puzzlePieceTwo.transform = std::vector<int>{ 1250, 600, 50, 50, 1 };
 	puzzleSysZero->puzzlePieceTwo.dependencies = { "ArrowQuiver" };
 
@@ -243,9 +245,6 @@ void Game::Update()
 	manager.Refresh();
 	manager.Update();
 	
-
-	// Check which storyPart is active
-
 	// camera code, not in use
 	/*
 	camera.x = skyHop.getComponent<TransformComponent>().position.x - 320;
@@ -354,6 +353,47 @@ GameMode::GameMode()
 
 GameMode::~GameMode()
 {
+
+}
+
+void GameMode::SetStoryPart(int part)
+{
+	storyPart = part;
+}
+
+int GameMode::GetStoryPart()
+{
+	return storyPart;
+}
+
+// Function is called from PuzzlePieceComponent
+// When the last piece of a puzzle is used
+void GameMode::ManageStoryPart(int part, std::string scene)
+{
+	std::cout << "GameMode::ManageStoryPart()" << std::endl;
+
+	// Error handling
+	if (part != storyPart)
+	{
+		std::cout << "\n\n\n\n" << "----------------" << std::endl;
+		std::cout << "ERROR:Story parts don't align" << std::endl;
+		std::cout << "----------------" << "\n\n\n\n" << std::endl;
+	}
+
+	// switch case to determine which story part is next
+	switch (part)
+	{
+	case 0: // Prologue
+		std::cout << "ManageStoryPart()->switch() Prologue" << std::endl;
+		
+		// Update puzzle status to solved
+		puzzleSysZero->SetPuzzleStatus(true);
+		storyPart = part + 1;
+		backgroundScene.getComponent<SpriteComponent>().SetNewTexture("Start");
+		break;
+	default:
+		break;
+	}
 
 }
 
