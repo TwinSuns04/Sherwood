@@ -5,12 +5,19 @@
 #include "ECS/Components.h"
 #include "Collision.h"
 #include "AssetManager.h"
+#include "PuzzleSystem.h"
+#include <sstream>
 
 TextureMap* map;
 Manager manager;
 GameMode* gameMode = nullptr;
 AdvancedTimer* timerEnemy;
 
+// Puzzle Systems
+PuzzleSystem* puzzleSysZero;
+PuzzleSystem* puzzleSysOne;
+
+SDL_Window* Game::window = nullptr;
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
@@ -19,9 +26,15 @@ AssetManager* Game::assets = new AssetManager(&manager);
 SDL_Rect Game::camera = { 0, 0, 640, 640 };
 
 bool Game::isRunning = false;
+bool Game::collisionCheck = false;
 
 // Create and add entities
-auto& backgroundScene(manager.AddEntity());
+// Some may need to be moved after prototype
+auto& player(manager.AddEntity());
+auto& backgroundScene(manager.AddEntity()); // Control the 'scene' of the game
+auto& basicUI(manager.AddEntity()); // Test UI
+auto& robinHood(manager.AddEntity()); // Robin Hood Character
+auto& rangerPrologue(manager.AddEntity()); // Ranger for prologue
 
 
 Game::Game()
@@ -40,6 +53,10 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	gameMode = new GameMode();
 	timerEnemy = new AdvancedTimer();
 
+	// Puzzle Instances
+	puzzleSysZero = new PuzzleSystem();
+	puzzleSysOne = new PuzzleSystem();
+
 	if (timerEnemy->GetIsStarted() == false)
 	{
 		timerEnemy->TimerStart();
@@ -52,7 +69,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 		flags = SDL_WINDOW_FULLSCREEN;
 	}
 
-	// initializing SDL
+	// initializing SDL and relevancies
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
 	{
 		std::cout << "Subsystems Initialised" << std::endl;
@@ -63,6 +80,18 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 		if (window)
 		{
 			std::cout << "Window Created" << std::endl;
+
+			SDL_SetWindowMouseGrab(window, SDL_TRUE);
+
+			if (SDL_GetWindowMouseGrab(window))
+			{
+				std::cout << "Window grabbed" << std::endl;
+			}
+			else
+			{
+				std::cout << "Window NOT grabbed" << std::endl;
+
+			}
 		}
 
 		renderer = SDL_CreateRenderer(window, -1, 0);
@@ -90,20 +119,89 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 		isRunning = false;
 	}
 
+	// Add fonts to asset manager/ font library
+	assets->AddFont("Arial", "Assets/arial.ttf", 16);
+
 	// Add textures to asset manager / texture library
-	assets->AddTexture("PrologueScene", "Assets/RobinAndTheRangerv001.png");
+#pragma region TextureLibrary
+
+	// Scenes
+	assets->AddTexture("PrologueScene", "Assets/Scenes/RobinAndTheRangerv001.png");
+	assets->AddTexture("Start", "Assets/Scenes/KirkleyHall_ref.png");
+
+	// Characters
+	assets->AddTexture("RobinSprite", "Assets/Characters/Robin_rough.png");
+	assets->AddTexture("RangerSprite", "Assets/Characters/Ranger_rough.png");
+
+	// User Interface
+	assets->AddTexture("Cursor", "Assets/UI/Cursor_rough.png");
+
+	// Puzzle Pieces
+	assets->AddTexture("ArrowQuiver", "Assets/PuzzleComp/Quiver_rough.png");
+	assets->AddTexture("DeerHeart", "Assets/PuzzleComp/DeerHeart_rough.png");
+
+
+#pragma endregion TextureLibrary
 
 	map = new TextureMap();
 
 	// Load Map
 	//TextureMap::LoadTextureMap("Assets/CanyonRun16x16.map", 16, 16);
-	
+
+// Create Puzzle Systems and set values using structs
+// Maybe read values from external file????
+#pragma region PuzzleSystemsCreation
+
+	// Prologue Puzzle System
+#pragma region PrologueSystem
+
+	puzzleSysZero->puzzlePieceOne.puzzleID = "ArrowQuiver";
+	puzzleSysZero->puzzlePieceOne.storyPart = 0;
+	puzzleSysZero->puzzlePieceOne.storyScene = "Prologue";
+	puzzleSysZero->puzzlePieceOne.lastPiece = false;
+	puzzleSysZero->puzzlePieceOne.transform = std::vector<int>{ 500, 600, 200, 200, 1 };
+	puzzleSysZero->puzzlePieceOne.dependencies = {};
+
+	puzzleSysZero->puzzlePieceTwo.puzzleID = "DeerHeart";
+	puzzleSysZero->puzzlePieceTwo.storyPart = 0;
+	puzzleSysZero->puzzlePieceTwo.storyScene = "Prologue";
+	puzzleSysZero->puzzlePieceTwo.lastPiece = true;
+	puzzleSysZero->puzzlePieceTwo.transform = std::vector<int>{ 1250, 600, 50, 50, 1 };
+	puzzleSysZero->puzzlePieceTwo.dependencies = { "ArrowQuiver" };
+
+#pragma endregion PrologueSystem
+
+	puzzleSysZero->CreateEntities();
+
+#pragma endregion PuzzleSystemsCreation
+
+	// Create Objects and add their components
 #pragma region ComponentCreation
 
-// Create canyon background object
+	// Player object
+	player.addComponent<TransformComponent>(0.0f, 0.0f, 1, 1, 1);
+	player.addComponent<CollisionComponent>("MouseCursor");
+	player.addComponent<KeyboardController>();
+	player.addComponent<Mouse>(800, 500);
+	
+
+	// Background Scene Object
 	backgroundScene.addComponent<TransformComponent>(0.0f, 0.0f, 1600, 1000, 1);
 	backgroundScene.addComponent<SpriteComponent>("PrologueScene");
 	backgroundScene.AddGroup(groupScenes);
+
+	// Character Objects
+	robinHood.addComponent<TransformComponent>(800.0f, 400.0f, 400, 400, 1);
+	robinHood.addComponent<SpriteComponent>("RobinSprite");
+	robinHood.AddGroup(groupCharacterSprites);
+
+	rangerPrologue.addComponent<TransformComponent>(200.0f, 400.0f, 400, 400, 1);
+	rangerPrologue.addComponent<SpriteComponent>("RangerSprite");
+	rangerPrologue.AddGroup(groupCharacterSprites);
+
+	// User Interface Objects
+	SDL_Color white = { 255, 255, 255, 255 };
+	basicUI.addComponent<UserInterface>(400, 400, "Test", "Arial", white);
 
 #pragma endregion ComponentCreation
 	
@@ -112,6 +210,9 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 // Create lists of group objects, using AssetManager Class,
 // by getting all objects with desired 'label'
 auto& scenes(manager.GetGroup(Game::groupScenes));
+auto& characterSprites(manager.GetGroup(Game::groupCharacterSprites));
+auto& puzzlePieces(manager.GetGroup(Game::groupPuzzlePieces));
+auto& userInterface(manager.GetGroup(Game::groupUI));
 
 // Handle SDL events
 void Game::HandleEvents()
@@ -134,11 +235,16 @@ void Game::HandleEvents()
 
 void Game::Update()
 {
-
+	// UI string update, not in use
+	/*
+	std::stringstream ss;
+	ss << "Test Output";
+	basicUI.getComponent<UserInterface>().SetUIText(ss.str(), "arial");
+	*/
 
 	manager.Refresh();
 	manager.Update();
-
+	
 	// camera code, not in use
 	/*
 	camera.x = skyHop.getComponent<TransformComponent>().position.x - 320;
@@ -161,10 +267,25 @@ void Game::Render()
 {
 	SDL_RenderClear(renderer);
 
-	// using painters algorithm, items on screen go back to front
+	// Using painters algorithm, items on screen go back to front, draw UI last
 	for (auto& s : scenes)
 	{
 		s->Draw();
+	}
+
+	for (auto& c : characterSprites)
+	{
+		c->Draw();
+	}
+
+	for (auto& p : puzzlePieces)
+	{
+		p->Draw();
+	}
+
+	for (auto& i : userInterface)
+	{
+		i->Draw();
 	}
 	
 	SDL_RenderPresent(renderer);
@@ -172,6 +293,7 @@ void Game::Render()
 
 void Game::Clean()
 {
+	SDL_SetWindowMouseGrab(window, SDL_FALSE);
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	IMG_Quit();
@@ -201,7 +323,10 @@ void Game::DisplayPlayerScore()
 
 void Game::DebugOne()
 {
-	
+	std::cout << "DebugOne()" << std::endl;
+	std::cout << "ArrowQuiver.bUsed: " <<
+		assets->GetPuzzlePiece("ArrowQuiver")->getComponent<PuzzlePieceComponent>().GetbUsed()
+		<< std::endl;
 }
 
 void Game::AddTileFuture(int srcX, int srcY, int posX, int posY)
@@ -218,7 +343,11 @@ void Game::AddTileFuture(int srcX, int srcY, int posX, int posY)
 
 GameMode::GameMode()
 {
-	
+	// init vars
+	GameMode::storyPart = 0;
+	GameMode::storyScene = "PrologueScene";
+
+	clickedPuzzlePiece = nullptr;
 
 }
 
@@ -227,6 +356,86 @@ GameMode::~GameMode()
 
 }
 
+void GameMode::SetStoryPart(int part)
+{
+	storyPart = part;
+}
+
+int GameMode::GetStoryPart()
+{
+	return storyPart;
+}
+
+// Function is called from PuzzlePieceComponent
+// When the last piece of a puzzle is used
+void GameMode::ManageStoryPart(int part, std::string scene)
+{
+	std::cout << "GameMode::ManageStoryPart()" << std::endl;
+
+	// Error handling
+	if (part != storyPart)
+	{
+		std::cout << "\n\n\n\n" << "----------------" << std::endl;
+		std::cout << "ERROR:Story parts don't align" << std::endl;
+		std::cout << "----------------" << "\n\n\n\n" << std::endl;
+	}
+
+	// switch case to determine which story part is next
+	switch (part)
+	{
+	case 0: // Prologue
+		std::cout << "ManageStoryPart()->switch() Prologue" << std::endl;
+		
+		// Update puzzle status to solved
+		puzzleSysZero->SetPuzzleStatus(true);
+		storyPart = part + 1;
+		backgroundScene.getComponent<SpriteComponent>().SetNewTexture("Start");
+		break;
+	default:
+		break;
+	}
+
+}
+
+bool GameMode::PuzzleCollisionCheck()
+{
+	SDL_Rect playerCollider = player.getComponent<CollisionComponent>().collider;
+
+	for (auto& p : puzzlePieces)
+	{
+		std::cout << "PuzzlePiece id: " << p->getComponent<PuzzlePieceComponent>().pieceName
+			<< std::endl;
+
+		SDL_Rect tempCol = p->getComponent<CollisionComponent>().collider;
+
+		if (Collision::AABB(playerCollider, tempCol))
+		{
+
+			std::cout << "Player x PuzzlePiece collision" << std::endl;
+			clickedPuzzlePiece = p;
+
+			return true;
+		}
+		else
+		{
+			std::cout << "No Player x PuzzlePiece collision" << std::endl;
+			clickedPuzzlePiece = nullptr;
+
+			continue;
+		}
+	}
+
+	return false;
+}
+
+void GameMode::PuzzlePieceInteraction()
+{
+	clickedPuzzlePiece->getComponent<PuzzlePieceComponent>().SetClickStatus(true);
+}
+
+// Functions used in CanyonRun to display player score to screen
+// Not in use
+/*
 void GameMode::TextSetter(SDL_Renderer* _renderer, const std::string& fPath,
 	int fSize, const std::string& message, const SDL_Color& color)
 {
@@ -274,4 +483,4 @@ void GameMode::DisplayPlayerScoreText(int xPos, int yPos, SDL_Renderer* _rendere
 	textRect.y = yPos;
 	SDL_RenderCopy(_renderer, textTexture, nullptr, &textRect);
 }
-
+*/

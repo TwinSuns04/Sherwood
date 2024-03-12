@@ -24,7 +24,7 @@ int main(int argc, char* args[])
 
 	game = new Game();
 
-	game->Init("TwinSuns Game Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 1000, false);
+	game->Init("TwinSuns Game Engine - RobinHoodPnC", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 1000, false);
 
 	while (game->Running())
 	{

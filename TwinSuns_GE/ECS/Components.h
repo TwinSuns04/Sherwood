@@ -10,3 +10,6 @@
 #include "HealthComponent.h"
 #include "ObjectController.h"
 #include "ProjectileComponent.h"
+#include "UserInterface.h"
+#include "Mouse.h"
+#include "PuzzlePieceComponent.h"

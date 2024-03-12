@@ -26,6 +26,28 @@ public:
 	void Update() override
 	{
 
+		if (Game::event.type == SDL_MOUSEBUTTONDOWN)
+		{
+			switch (Game::event.button.button)
+			{
+			case SDL_BUTTON_LEFT:
+				//std::cout << "Left Click" << std::endl;
+				if (gameMode->PuzzleCollisionCheck())
+				{
+					std::cout << "Puzzle Piece Clicked" << std::endl;
+					gameMode->PuzzlePieceInteraction();
+				}
+				break;
+
+			case SDL_BUTTON_RIGHT:
+				//std::cout << "Right Click" << std::endl;
+				break;
+
+			default:
+				break;
+			}
+		}
+
 		// check if events exists
 		// down key press
 		if (Game::event.type == SDL_KEYDOWN)
@@ -33,6 +55,9 @@ public:
 			// switch statement to check which key was pressed
 			switch (Game::event.key.keysym.sym)
 			{
+
+				// Commented out because don't want movement
+			/*
 			case SDLK_w:
 				transform->velocity.y = -2;
 				//sprite->PlayAnim("Walk"), how to play anim on key press
@@ -51,6 +76,7 @@ public:
 			case SDLK_d:
 				transform->velocity.x = 2;
 				break;
+			*/
 
 			case SDLK_p:
 				std::cout << "The game is paused" << std::endl;

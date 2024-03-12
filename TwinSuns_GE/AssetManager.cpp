@@ -4,7 +4,7 @@
 
 AssetManager::AssetManager(Manager* man) : manager(man)
 {
-
+	numPP = 0;
 }
 
 AssetManager::~AssetManager()
@@ -20,6 +20,46 @@ void AssetManager::AddTexture(std::string id, const char* path)
 SDL_Texture* AssetManager::GetTexture(std::string id)
 {
 	return texturesMap[id];
+}
+
+void AssetManager::AddFont(std::string id, std::string path, int fontSize)
+{
+	fontsMap.emplace(id, TTF_OpenFont(path.c_str(), fontSize));
+}
+
+TTF_Font* AssetManager::GetFont(std::string id)
+{
+	return fontsMap[id];
+}
+
+// Create individual puzzle pieces
+void AssetManager::CreatePuzzlePiece(std::string id, bool last, int part, std::string scene,
+	std::vector<int> trans, std::vector<std::string> dependencies)
+{
+	numPP++;
+	auto& puzzlePiece(manager->AddEntity());
+	puzzlePiece.addComponent<TransformComponent>(static_cast<float> (trans[0]), 
+		static_cast<float> (trans[1]), trans[2], trans[3], trans[4]);
+	puzzlePiece.addComponent<SpriteComponent>(id);
+	puzzlePiece.addComponent<CollisionComponent>(id);
+	puzzlePiece.addComponent<PuzzlePieceComponent>(id, last, part, scene);
+	puzzlePiece.AddGroup(Game::groupPuzzlePieces);
+	puzzlePieceMap.emplace(id, &puzzlePiece);
+
+	// Manage puzzlePiece dependcies
+	if (dependencies.size() != 0)
+	{
+		for (int i = 0; i < dependencies.size(); i++)
+		{
+			puzzlePiece.getComponent<PuzzlePieceComponent>().CreateDependencies(dependencies[i]);
+		}
+	}
+
+}
+
+Entity* AssetManager::GetPuzzlePiece(std::string ID)
+{
+	return puzzlePieceMap[ID];
 }
 
 // Canyon Run Code
