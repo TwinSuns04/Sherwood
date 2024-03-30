@@ -19,6 +19,7 @@ private:
 	SDL_Rect srcRect, destRect;
 
 	// variables
+	bool toggleDraw;
 	bool isAnimated; // whether sprite is animated or not
 	int frames; // number of frames in sprite file
 	int speed = 100; // delay between frames in milliseconds
@@ -38,10 +39,22 @@ public:
 	SpriteComponent(std::string id)
 	{
 		SetNewTexture(id);
+		toggleDraw = true;
+		spriteFlip = SDL_FLIP_NONE;
+	}
+
+	// Sprite with toggleDraw
+	SpriteComponent(std::string id, bool toggle)
+	{
+		SetNewTexture(id);
+		toggleDraw = toggle;
+		spriteFlip = SDL_FLIP_NONE;
 	}
 
 	// Additional Constructor, dif params
 	// For sprite sheets and animated sprites
+	// Not in use
+	/*
 	SpriteComponent(std::string id, bool isAnim)
 	{
 		isAnimated = isAnim;
@@ -59,6 +72,7 @@ public:
 		SetNewTexture(id);
 
 	}
+	*/
 
 	~SpriteComponent()
 	{}
@@ -100,12 +114,37 @@ public:
 
 	void Draw() override
 	{
-		TextureManager::Draw(texture, srcRect, destRect, spriteFlip);
+		// Only draw sprite of toggled on
+		if (toggleDraw)
+		{
+			TextureManager::Draw(texture, srcRect, destRect, spriteFlip);
+		}
+		
 	}
 
 	void SetNewTexture(std::string id)
 	{
 		texture = Game::assets->GetTexture(id);
+	}
+
+	void SetToggleDraw(bool toggle)
+	{
+		toggleDraw = toggle;
+	}
+
+	void ResetTextureFlip()
+	{
+		spriteFlip = SDL_FLIP_NONE;
+	}
+
+	void HorizontalFlip()
+	{
+		spriteFlip = SDL_FLIP_HORIZONTAL;
+	}
+
+	void VerticalFlip()
+	{
+		spriteFlip = SDL_FLIP_VERTICAL;
 	}
 
 	SDL_Texture* GetTexture()

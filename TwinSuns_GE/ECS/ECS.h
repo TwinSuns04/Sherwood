@@ -9,6 +9,7 @@
 #include <bitset>
 #include <array>
 
+// Forward statements
 class Component;
 class Entity;
 class Manager;
@@ -88,6 +89,9 @@ public:
 
 	bool GetActive() const { return active; }
 	
+	// Entity is not destroyed in this function
+	// Active is toggled to off and then the entity
+	// is destroyed during Refresh()
 	void Destroy() 
 	{ 
 		active = false; 
@@ -98,7 +102,7 @@ public:
 	void ClearComponents()
 	{
 		components.clear();
-		//componentArray.empty();
+		componentArray.empty();
 		componentBitSet.reset();
 	}
 
@@ -122,6 +126,7 @@ public:
 	template <typename T, typename... TArgs >
 	T& addComponent(TArgs&&... mArgs)
 	{
+
 		T* c(new T(std::forward<TArgs>(mArgs)...));
 		c->entity = this;
 		std::unique_ptr<Component> uPtr{ c };
@@ -140,6 +145,11 @@ public:
 		auto ptr(componentArray[GetComponentTypeID<T>()]);
 
 		return *static_cast<T*>(ptr);
+	}
+
+	int GetNumComponents()
+	{
+		return components.size();
 	}
 
 };
@@ -211,5 +221,11 @@ public:
 
 		return *e;
 	}
+
+	int GetNumEntities()
+	{
+		return entities.size();
+	}
+
 
 };
