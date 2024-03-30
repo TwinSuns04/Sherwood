@@ -57,4 +57,20 @@ public:
 		position.y += velocity.y * speed;
 	}
 
+	bool SetNewTransformPos(float x, float y)
+	{
+		position.x = x;
+		position.y = y;
+
+		if ((position.x == x) && (position.y == y))
+		{
+			return true;
+		}
+		else 
+		{
+			return false;
+		}
+		
+	}
+
 };

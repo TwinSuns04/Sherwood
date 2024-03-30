@@ -33,7 +33,7 @@ int main(int argc, char* args[])
 		game->HandleEvents();
 		game->Update();
 		game->Render();
-		game->DisplayPlayerScore();
+		//game->DisplayPlayerScore();
 
 		frameTime = SDL_GetTicks64() - frameStart;
 

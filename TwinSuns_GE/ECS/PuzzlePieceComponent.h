@@ -20,7 +20,8 @@ private:
 	bool clickStatus;
 	bool bUsed;
 	int storyPart;
-	std::string storyScene;
+	char storyScene;
+	int numID;
 
 	std::vector<std::string> dependentVector;
 
@@ -42,12 +43,14 @@ public:
 		lastPiece = false; // if not specified, piece is assumed to not be final piece
 	}
 
-	PuzzlePieceComponent(std::string id, bool last, int part, std::string scene)
+	PuzzlePieceComponent(std::string id, int part, char scene, int num, bool last)
 	{
 		pieceName = id;
-		lastPiece = last;
 		storyPart = part;
 		storyScene = scene;
+		numID = num;
+		lastPiece = last;
+		dependentVector.clear();
 	}
 
 	~PuzzlePieceComponent()
@@ -59,7 +62,7 @@ public:
 		bUsed = false;
 	}
 
-	
+
 	void SetClickStatus(bool click)
 	{
 		clickStatus = click;
@@ -70,18 +73,18 @@ public:
 			SetbUsed(CheckDependencies());
 		}
 
-		std::cout << "bUsed: " << GetbUsed() << std::endl;
+		//std::cout << "bUsed: " << GetbUsed() << std::endl;
 
 		// If the puzzle piece has been properly used
 		// and is the last piece
 		if (bUsed && lastPiece)
 		{
-			std::cout << "PuzzlePiece used and is last piece" << "\n" << std::endl;
+			//std::cout << "PuzzlePiece used and is last piece" << "\n" << std::endl;
 
 			// call appropriate function in GameMode class, pass part and scene
 			gameMode->ManageStoryPart(storyPart, storyScene);
 		}
-		
+
 	}
 
 	bool GetClickStatus()
@@ -99,6 +102,16 @@ public:
 		return bUsed;
 	}
 
+	void SetNumID(int num)
+	{
+		numID = num;
+	}
+
+	int GetNumID()
+	{
+		return numID;
+	}
+
 	void SetLastPiece(bool last)
 	{
 		lastPiece = last;
@@ -109,9 +122,19 @@ public:
 		return lastPiece;
 	}
 
+	void SetStoryScene(char scene)
+	{
+		storyScene = scene;
+	}
+
+	char GetStoryScene()
+	{
+		return storyScene;
+	}
+
 	void CreateDependencies(std::string dependentID)
 	{
-		std::cout << "CreateDependencies() exec" << std::endl;
+		//std::cout << "CreateDependencies() exec" << std::endl;
 
 		dependentVector.emplace_back(dependentID);
 	}
@@ -120,7 +143,7 @@ public:
 	// If yes, update this->puzzlePiece bUsed = true
 	bool CheckDependencies()
 	{
-		std::cout << "CheckDependencies() exec" << std::endl;
+		//std::cout << "CheckDependencies() exec" << std::endl;
 		std::cout << "PuzzlePieceID: " << pieceName << std::endl;
 
 		// Check if puzzlePiece is dependent

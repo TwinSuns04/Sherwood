@@ -65,7 +65,7 @@ public:
 	};
 
 	// Additional Functions
-	void DisplayPlayerScore(); // Display player score on screen
+	void DisplayText();
 	void DebugOne();
 
 };
@@ -82,22 +82,6 @@ public:
 	GameMode();
 	~GameMode();
 
-// Member Functions
-#pragma region Functions
-
-	void SetStoryPart(int part);
-	int GetStoryPart();
-	void ManageStoryPart(int part, std::string scene);
-
-	void SetStoryPartScene(std::string scene);
-	std::string GetStoryPartScene();
-
-	bool PuzzleCollisionCheck();
-	void PuzzlePieceInteraction();
-
-	// Canyon Run functions used to display player score to screen
-	// Maybe utilize for dialogue?
-	/*
 	void TextSetter(SDL_Renderer* _renderer, const std::string& fontPath, int fontSize,
 		const std::string& messageText, const SDL_Color& color);
 
@@ -105,28 +89,71 @@ public:
 		const std::string& fontPath, int fontSize,
 		const std::string& messageText, const SDL_Color& color);
 
-	void DisplayPlayerScoreText(int xPos, int yPos, SDL_Renderer* _renderer);
-	*/
+	void DisplayOnScreenText(int xPos, int yPos, SDL_Renderer* _renderer);
 
-#pragma endregion Functions
 
+	// Member Functions
+	void SetStoryPart(int part);
+	int GetStoryPart();
+	void ManageStoryPart(int part, char scene);
+
+	void SetStoryScene(char scene);
+	char GetStoryScene();
+	void UpdateBackgroundScene(std::string sceneID);
+
+	bool PuzzleCollisionCheck();
+	void PuzzlePieceInteraction();
+
+	// Functions to update vars to correspond with story parts and scenes
+#pragma region LoadFunctions
+	void PrologueSceneB();
+
+	void Part1SceneA();
+	void Part1SceneB();
+	void Part1SceneC();
+	void Part1SceneD();
+	void Part1SceneE();
+
+	void Part2SceneA();
+	void Part2SceneB();
+	void Part2SceneC();
+
+	void Part3SceneA();
+
+	void Part4SceneA();
+	void Part4SceneB();
+
+	void Part5SceneA();
+
+	void Part6SceneA();
+	void Part6SceneB();
+
+	void Part7SceneA();
+	void Part7SceneB();
+
+	void Part8SceneA();
+	void Part8SceneB();
+
+	void Part9SceneA();
+
+	void GameComplete();
+#pragma endregion LoadFunctions
+
+	// Canyon Run functions used to display player score to screen
+	// Maybe utilize for dialogue?
 	
 	// Objects
 	SDL_Texture* textTexture = nullptr;
 	SDL_Rect textRect;
 
-	
-
 private:
 
-	// variables
+	// variables and objects
 	Entity* clickedPuzzlePiece;
 	
-	int storyPart;
+	static int storyPart;
 	int storyPartOld;
 	int storyPartNew;
-	std::string storyScene;
-	std::string storySceneOld;
-	std::string storySceneNew;
+	static char storyScene;
 
 };
