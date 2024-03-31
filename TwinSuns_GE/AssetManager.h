@@ -39,6 +39,9 @@ public:
 	bool ClearPuzzlePieceMap(int part, char scene);
 	std::unordered_map<int, std::string>* ClearPuzzleSysPieceMap(int part, char scene);
 
+	int GetMapSize();
+	void GetMapElements();
+
 	// Scene loaders
 	void PuzzleZero_ALoad(PuzzleSystem *puzzleSys);
 	void PuzzleZero_BLoad(PuzzleSystem* puzzleSys);
