@@ -287,6 +287,7 @@ void AssetManager::CreatePuzzlePiece(std::string id, int part, char scene, int n
 		}
 		else if (scene == 'B')
 		{
+			std::cout << id << "added to puzzleTwoB_IDs" << std::endl;
 			puzzleTwoB_IDs.emplace(num, id);
 			break;
 		}
@@ -928,6 +929,19 @@ void AssetManager::PuzzleNine_ALoad(PuzzleSystem* puzzleSys)
 	}
 }
 #pragma endregion PuzzleLoads
+
+int AssetManager::GetMapSize()
+{
+	return puzzleTwoB_IDs.size();
+}
+
+void AssetManager::GetMapElements()
+{
+	for (int i = 1; i <= puzzleTwoB_IDs.size(); i++)
+	{
+		std::cout << "Element " << i << "s id: " << puzzleTwoB_IDs[i] << std::endl;
+	}
+}
 
 // Canyon Run Code
 /*
