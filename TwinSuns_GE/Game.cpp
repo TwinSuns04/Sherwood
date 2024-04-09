@@ -187,12 +187,12 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 
 	// Scenes
 	assets->AddTexture("Start", "Assets/Scenes/KirkleyHall_ref.png");
-	assets->AddTexture("PrologueScene", "Assets/Scenes/RobinAndTheRangerv001.png"); // 0A
-	assets->AddTexture("RobinFightsLJ", "Assets/Scenes/RobinAndLittleJohn_v001.png"); // 0B
+	assets->AddTexture("PrologueScene", "Assets/Scenes/RobinAndTheRangerv001.png"); // 0A, 9A
+	assets->AddTexture("RobinFightsLJ", "Assets/Scenes/RobinAndLittleJohn_v001.png"); // 0B, 4A
 
-	assets->AddTexture("SherwoodForest1", "Assets/Scenes/SherwoodForest1_v001.png"); // 1A
+	assets->AddTexture("SherwoodForest1", "Assets/Scenes/SherwoodForest1_v001.png"); // 1A, 8A
 	assets->AddTexture("BlueBoarInt", "Assets/Scenes/BlueBoarInt_v001.png"); // 1B
-	assets->AddTexture("SherwoodForest2", "Assets/Scenes/SherwoodForest2_v001.png"); // 1C
+	assets->AddTexture("SherwoodForest2", "Assets/Scenes/SherwoodForest2_v001.png"); // 1C, 7B
 	assets->AddTexture("ArcheryComp", "Assets/Scenes/ArcheryComp2_v001.png"); // 1D
 	assets->AddTexture("HangmansNoose", "Assets/Scenes/HangmansNoose_v001.png"); // 1E
 
@@ -201,18 +201,19 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	assets->AddTexture("RobinsCamp", "Assets/Scenes/RobinsCamp_v001.png"); // 2C
 
 	assets->AddTexture("SherwoodForestRoad", "Assets/Scenes/SherwoodForestRoad_v001.png"); // 3A
+	assets->AddTexture("TheWedding", "Assets/Scenes/TheWedding_v001.png"); // 4B
+
+	assets->AddTexture("SherwoodForestB1", "Assets/Scenes/SherwoodForestBalladOne_v001.png"); // 5A
+
+	assets->AddTexture("RoadToNottingham2", "Assets/Scenes/RoadToNottingham2_v001.png"); // 6A
+	assets->AddTexture("NottinghamOuter", "Assets/Scenes/NottinghamTown_Outer.png"); // 6B
+
+	assets->AddTexture("ArcheryComp1", "Assets/Scenes/ArcheryComp1_v001.png"); // 7A
 
 	assets->AddTexture("BlueBoar", "Assets/Scenes/BlueBoar_v001.png");
 	assets->AddTexture("NottinghamChurch", "Assets/Scenes/NottinghamChurch2_v001.png");
-	assets->AddTexture("NottinghamOuter", "Assets/Scenes/NottinghamTown_Outer.png");
-	assets->AddTexture("RoadToNottingham2", "Assets/Scenes/RoadToNottingham2_v001.png");
 	
-
 	
-	assets->AddTexture("SherwoodForestB1", "Assets/Scenes/SherwoodForestBalladOne_v001.png");
-	
-	assets->AddTexture("TheWedding", "Assets/Scenes/TheWedding_v001.png");
-
 
 	// Characters
 	assets->AddTexture("RobinSprite", "Assets/Characters/Robin_rough.png"); // RobinHood w/ bow
@@ -233,7 +234,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	assets->AddTexture("DeerHeart", "Assets/PuzzleComp/DeerHeart.png"); // 0A
 	assets->AddTexture("QuarterStaff", "Assets/PuzzleComp/QuarterStaff.png"); // 0B, 1C, 3A
 	assets->AddTexture("Horn", "Assets/PuzzleComp/WarHorn.png"); // 0B, 1C
-	assets->AddTexture("CoinPurse", "Assets/PuzzleComp/CoinPurse.png"); // 1B, 2C
+	assets->AddTexture("CoinPurse", "Assets/PuzzleComp/CoinPurse.png"); // 1B, 2C, 5A
 	assets->AddTexture("Tankard_Empty", "Assets/PuzzleComp/Tankard_Empty.png"); // 1B
 	assets->AddTexture("BrokenQS", "Assets/PuzzleComp/BrokenStaff.png"); // 1C
 	assets->AddTexture("Arrow", "Assets/PuzzleComp/Arrow.png"); // 1D
@@ -270,6 +271,13 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	assets->AddTexture("StutleyPH", "Assets/PuzzleComp/PlaceHolders/StutleyPH.png"); // 1E
 	assets->AddTexture("ScarletPH", "Assets/PuzzleComp/PlaceHolders/ScarletPH.png"); // 3A
 	assets->AddTexture("TuckPH", "Assets/PuzzleComp/PlaceHolders/TuckPH.png"); // 4A
+	assets->AddTexture("BishopPH", "Assets/PuzzleComp/PlaceHolders/BishopPH.png"); // 5A
+	assets->AddTexture("SirRichardPH", "Assets/PuzzleComp/PlaceHolders/SirRichardPH.png"); // 5A
+	assets->AddTexture("HidingPH1", "Assets/PuzzleComp/PlaceHolders/HidingPH1.png"); // 7B
+	assets->AddTexture("HidingPH2", "Assets/PuzzleComp/PlaceHolders/HidingPH2.png"); // 7B
+	assets->AddTexture("GisbournePH", "Assets/PuzzleComp/PlaceHolders/GisbournePH.png"); // 8A
+	assets->AddTexture("NoosePH", "Assets/PuzzleComp/PlaceHolders/NoosePH.png"); // 8B
+	assets->AddTexture("SheriffPH", "Assets/PuzzleComp/PlaceHolders/SheriffPH.png"); // 9A
 
 	// Place Holders for dialogue puzzle pieces/elements
 	assets->AddTexture("DialoguePuzzle1", "Assets/PuzzleComp/Dialogue/DialoguePuzzle1.png"); // 1A, 2A
@@ -707,9 +715,275 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	puzzleSysFourB->puzzlePieceThree.lastPiece = true;
 	puzzleSysFourB->puzzlePieceThree.spriteID = "Harp";
 	puzzleSysFourB->puzzlePieceThree.transform = std::vector<int>{ 600, 200, 32, 32, 2 };
-	puzzleSysFourB->puzzlePieceThree.dependencies = std::vector<std::string>{ puzzleSysFourB->puzzlePieceOne.puzzleID, puzzleSysFourB->puzzlePieceTwo.puzzleID };
+	puzzleSysFourB->puzzlePieceThree.dependencies = std::vector<std::string>{ puzzleSysFourB->puzzlePieceOne.puzzleID, 
+		puzzleSysFourB->puzzlePieceTwo.puzzleID };
 
 #pragma endregion Part4System
+
+	puzzleSysFourA->CreateBaseEntity(4);
+	puzzleSysFourB->CreateBaseEntity(3);
+
+#pragma region Part5System
+
+	// Scene A
+	puzzleSysFiveA->puzzlePieceOne.puzzleID = "BishopPH.5A";
+	puzzleSysFiveA->puzzlePieceOne.storyPart = 5;
+	puzzleSysFiveA->puzzlePieceOne.storyScene = 'A';
+	puzzleSysFiveA->puzzlePieceOne.puzzlePieceNum = 1;
+	puzzleSysFiveA->puzzlePieceOne.lastPiece = false;
+	puzzleSysFiveA->puzzlePieceOne.spriteID = "BishopPH";
+	puzzleSysFiveA->puzzlePieceOne.transform = std::vector<int>{ 200, 200, 32, 32, 2 };
+	puzzleSysFiveA->puzzlePieceOne.dependencies = std::vector<std::string>{};
+
+	puzzleSysFiveA->puzzlePieceTwo.puzzleID = "SirRichardPH.5A";
+	puzzleSysFiveA->puzzlePieceTwo.storyPart = 5;
+	puzzleSysFiveA->puzzlePieceTwo.storyScene = 'A';
+	puzzleSysFiveA->puzzlePieceTwo.puzzlePieceNum = 2;
+	puzzleSysFiveA->puzzlePieceTwo.lastPiece = false;
+	puzzleSysFiveA->puzzlePieceTwo.spriteID = "SirRichardPH";
+	puzzleSysFiveA->puzzlePieceTwo.transform = std::vector<int>{ 400, 200, 32, 32, 2 };
+	puzzleSysFiveA->puzzlePieceTwo.dependencies = std::vector<std::string>{ puzzleSysFiveA->puzzlePieceOne.puzzleID };
+
+	puzzleSysFiveA->puzzlePieceThree.puzzleID = "CoinPurse.5A";
+	puzzleSysFiveA->puzzlePieceThree.storyPart = 5;
+	puzzleSysFiveA->puzzlePieceThree.storyScene = 'A';
+	puzzleSysFiveA->puzzlePieceThree.puzzlePieceNum = 3;
+	puzzleSysFiveA->puzzlePieceThree.lastPiece = true;
+	puzzleSysFiveA->puzzlePieceThree.spriteID = "CoinPurse";
+	puzzleSysFiveA->puzzlePieceThree.transform = std::vector<int>{ 600, 200, 32, 32, 2 };
+	puzzleSysFiveA->puzzlePieceThree.dependencies = std::vector<std::string>{ puzzleSysFiveA->puzzlePieceOne.puzzleID, 
+		puzzleSysFiveA->puzzlePieceTwo.puzzleID };
+
+#pragma endregion Part5System
+
+	puzzleSysFiveA->CreateBaseEntity(3);
+
+#pragma region Part6System
+
+	// Scene A
+	puzzleSysSixA->puzzlePieceOne.puzzleID = "FightPH.6A";
+	puzzleSysSixA->puzzlePieceOne.storyPart = 6;
+	puzzleSysSixA->puzzlePieceOne.storyScene = 'A';
+	puzzleSysSixA->puzzlePieceOne.puzzlePieceNum = 1;
+	puzzleSysSixA->puzzlePieceOne.lastPiece = false;
+	puzzleSysSixA->puzzlePieceOne.spriteID = "FightPH";
+	puzzleSysSixA->puzzlePieceOne.transform = std::vector<int>{ 200, 200, 32, 32, 2 };
+	puzzleSysSixA->puzzlePieceOne.dependencies = std::vector<std::string>{};
+
+	puzzleSysSixA->puzzlePieceTwo.puzzleID = "Cloak_Brown.6A";
+	puzzleSysSixA->puzzlePieceTwo.storyPart = 6;
+	puzzleSysSixA->puzzlePieceTwo.storyScene = 'A';
+	puzzleSysSixA->puzzlePieceTwo.puzzlePieceNum = 2;
+	puzzleSysSixA->puzzlePieceTwo.lastPiece = true;
+	puzzleSysSixA->puzzlePieceTwo.spriteID = "Cloak_Brown";
+	puzzleSysSixA->puzzlePieceTwo.transform = std::vector<int>{ 400, 200, 32, 32, 2 };
+	puzzleSysSixA->puzzlePieceTwo.dependencies = std::vector<std::string>{ puzzleSysSixA->puzzlePieceOne.puzzleID };
+
+	// Scene B
+	puzzleSysSixB->puzzlePieceOne.puzzleID = "FightPH.6B";
+	puzzleSysSixB->puzzlePieceOne.storyPart = 6;
+	puzzleSysSixB->puzzlePieceOne.storyScene = 'B';
+	puzzleSysSixB->puzzlePieceOne.puzzlePieceNum = 1;
+	puzzleSysSixB->puzzlePieceOne.lastPiece = false;
+	puzzleSysSixB->puzzlePieceOne.spriteID = "FightPH";
+	puzzleSysSixB->puzzlePieceOne.transform = std::vector<int>{ 200, 200, 32, 32, 2 };
+	puzzleSysSixB->puzzlePieceOne.dependencies = std::vector<std::string>{};
+
+	puzzleSysSixB->puzzlePieceTwo.puzzleID = "FightPH2.6B";
+	puzzleSysSixB->puzzlePieceTwo.storyPart = 6;
+	puzzleSysSixB->puzzlePieceTwo.storyScene = 'B';
+	puzzleSysSixB->puzzlePieceTwo.puzzlePieceNum = 2;
+	puzzleSysSixB->puzzlePieceTwo.lastPiece = false;
+	puzzleSysSixB->puzzlePieceTwo.spriteID = "FightPH2";
+	puzzleSysSixB->puzzlePieceTwo.transform = std::vector<int>{ 400, 200, 32, 32, 2 };
+	puzzleSysSixB->puzzlePieceTwo.dependencies = std::vector<std::string>{ puzzleSysSixB->puzzlePieceOne.puzzleID };
+
+	puzzleSysSixB->puzzlePieceThree.puzzleID = "FightPH3.6B";
+	puzzleSysSixB->puzzlePieceThree.storyPart = 6;
+	puzzleSysSixB->puzzlePieceThree.storyScene = 'B';
+	puzzleSysSixB->puzzlePieceThree.puzzlePieceNum = 3;
+	puzzleSysSixB->puzzlePieceThree.lastPiece = false;
+	puzzleSysSixB->puzzlePieceThree.spriteID = "FightPH3";
+	puzzleSysSixB->puzzlePieceThree.transform = std::vector<int>{ 600, 200, 32, 32, 2 };
+	puzzleSysSixB->puzzlePieceThree.dependencies = std::vector<std::string>{ puzzleSysSixB->puzzlePieceOne.puzzleID, 
+	puzzleSysSixB->puzzlePieceTwo.puzzleID };
+
+	puzzleSysSixB->puzzlePieceFour.puzzleID = "FightPH4.6B";
+	puzzleSysSixB->puzzlePieceFour.storyPart = 6;
+	puzzleSysSixB->puzzlePieceFour.storyScene = 'B';
+	puzzleSysSixB->puzzlePieceFour.puzzlePieceNum = 4;
+	puzzleSysSixB->puzzlePieceFour.lastPiece = true;
+	puzzleSysSixB->puzzlePieceFour.spriteID = "FightPH4";
+	puzzleSysSixB->puzzlePieceFour.transform = std::vector<int>{ 800, 200, 32, 32, 2 };
+	puzzleSysSixB->puzzlePieceFour.dependencies = std::vector<std::string>{ puzzleSysSixB->puzzlePieceOne.puzzleID,
+	puzzleSysSixB->puzzlePieceTwo.puzzleID, puzzleSysSixB->puzzlePieceThree.puzzleID };
+
+#pragma endregion Part6System
+
+	puzzleSysSixA->CreateBaseEntity(2);
+	puzzleSysSixB->CreateBaseEntity(4);
+
+#pragma region Part7System
+
+	// Scene A
+	puzzleSysSevenA->puzzlePieceOne.puzzleID = "Arrow.7A";
+	puzzleSysSevenA->puzzlePieceOne.storyPart = 7;
+	puzzleSysSevenA->puzzlePieceOne.storyScene = 'A';
+	puzzleSysSevenA->puzzlePieceOne.puzzlePieceNum = 1;
+	puzzleSysSevenA->puzzlePieceOne.lastPiece = false;
+	puzzleSysSevenA->puzzlePieceOne.spriteID = "Arrow";
+	puzzleSysSevenA->puzzlePieceOne.transform = std::vector<int>{ 200, 200, 64, 32, 2 };
+	puzzleSysSevenA->puzzlePieceOne.dependencies = std::vector<std::string>{};
+
+	puzzleSysSevenA->puzzlePieceTwo.puzzleID = "ArrowTargetPH.7A";
+	puzzleSysSevenA->puzzlePieceTwo.storyPart = 7;
+	puzzleSysSevenA->puzzlePieceTwo.storyScene = 'A';
+	puzzleSysSevenA->puzzlePieceTwo.puzzlePieceNum = 2;
+	puzzleSysSevenA->puzzlePieceTwo.lastPiece = false;
+	puzzleSysSevenA->puzzlePieceTwo.spriteID = "ArrowTargetPH";
+	puzzleSysSevenA->puzzlePieceTwo.transform = std::vector<int>{ 400, 200, 32, 32, 2 };
+	puzzleSysSevenA->puzzlePieceTwo.dependencies = std::vector<std::string>{ puzzleSysSevenA->puzzlePieceOne.puzzleID };
+
+	puzzleSysSevenA->puzzlePieceThree.puzzleID = "TrophyPH.7A";
+	puzzleSysSevenA->puzzlePieceThree.storyPart = 7;
+	puzzleSysSevenA->puzzlePieceThree.storyScene = 'A';
+	puzzleSysSevenA->puzzlePieceThree.puzzlePieceNum = 3;
+	puzzleSysSevenA->puzzlePieceThree.lastPiece = true;
+	puzzleSysSevenA->puzzlePieceThree.spriteID = "TrophyPH";
+	puzzleSysSevenA->puzzlePieceThree.transform = std::vector<int>{ 600, 200, 32, 32, 2 };
+	puzzleSysSevenA->puzzlePieceThree.dependencies = std::vector<std::string>{ puzzleSysSevenA->puzzlePieceOne.puzzleID,
+	puzzleSysSevenA->puzzlePieceTwo.puzzleID };
+
+	// Scene B
+	puzzleSysSevenB->puzzlePieceOne.puzzleID = "HidingPH1.7B";
+	puzzleSysSevenB->puzzlePieceOne.storyPart = 7;
+	puzzleSysSevenB->puzzlePieceOne.storyScene = 'B';
+	puzzleSysSevenB->puzzlePieceOne.puzzlePieceNum = 1;
+	puzzleSysSevenB->puzzlePieceOne.lastPiece = false;
+	puzzleSysSevenB->puzzlePieceOne.spriteID = "HidingPH1";
+	puzzleSysSevenB->puzzlePieceOne.transform = std::vector<int>{ 200, 200, 32, 32, 2 };
+	puzzleSysSevenB->puzzlePieceOne.dependencies = std::vector<std::string>{};
+
+	puzzleSysSevenB->puzzlePieceTwo.puzzleID = "HidingPH2.7B";
+	puzzleSysSevenB->puzzlePieceTwo.storyPart = 7;
+	puzzleSysSevenB->puzzlePieceTwo.storyScene = 'B';
+	puzzleSysSevenB->puzzlePieceTwo.puzzlePieceNum = 2;
+	puzzleSysSevenB->puzzlePieceTwo.lastPiece = true;
+	puzzleSysSevenB->puzzlePieceTwo.spriteID = "HidingPH2";
+	puzzleSysSevenB->puzzlePieceTwo.transform = std::vector<int>{ 400, 200, 32, 32, 2 };
+	puzzleSysSevenB->puzzlePieceTwo.dependencies = std::vector<std::string>{ puzzleSysSevenB->puzzlePieceOne.puzzleID };
+
+#pragma endregion Part7System
+
+	puzzleSysSevenA->CreateBaseEntity(3);
+	puzzleSysSevenB->CreateBaseEntity(2);
+
+#pragma region Part8System
+
+	// Scene A
+	puzzleSysEightA->puzzlePieceOne.puzzleID = "Arrow.8A";
+	puzzleSysEightA->puzzlePieceOne.storyPart = 8;
+	puzzleSysEightA->puzzlePieceOne.storyScene = 'A';
+	puzzleSysEightA->puzzlePieceOne.puzzlePieceNum = 1;
+	puzzleSysEightA->puzzlePieceOne.lastPiece = false;
+	puzzleSysEightA->puzzlePieceOne.spriteID = "Arrow";
+	puzzleSysEightA->puzzlePieceOne.transform = std::vector<int>{ 200, 200, 64, 32, 2 };
+	puzzleSysEightA->puzzlePieceOne.dependencies = std::vector<std::string>{};
+
+	puzzleSysEightA->puzzlePieceTwo.puzzleID = "GisbournePH.8A";
+	puzzleSysEightA->puzzlePieceTwo.storyPart = 8;
+	puzzleSysEightA->puzzlePieceTwo.storyScene = 'A';
+	puzzleSysEightA->puzzlePieceTwo.puzzlePieceNum = 2;
+	puzzleSysEightA->puzzlePieceTwo.lastPiece = false;
+	puzzleSysEightA->puzzlePieceTwo.spriteID = "GisbournePH";
+	puzzleSysEightA->puzzlePieceTwo.transform = std::vector<int>{ 400, 200, 32, 32, 2 };
+	puzzleSysEightA->puzzlePieceTwo.dependencies = std::vector<std::string>{ puzzleSysEightA->puzzlePieceOne.puzzleID };
+
+	puzzleSysEightA->puzzlePieceThree.puzzleID = "FightPH.8A";
+	puzzleSysEightA->puzzlePieceThree.storyPart = 8;
+	puzzleSysEightA->puzzlePieceThree.storyScene = 'A';
+	puzzleSysEightA->puzzlePieceThree.puzzlePieceNum = 3;
+	puzzleSysEightA->puzzlePieceThree.lastPiece = false;
+	puzzleSysEightA->puzzlePieceThree.spriteID = "FightPH";
+	puzzleSysEightA->puzzlePieceThree.transform = std::vector<int>{ 600, 200, 32, 32, 2 };
+	puzzleSysEightA->puzzlePieceThree.dependencies = std::vector<std::string>{ puzzleSysEightA->puzzlePieceOne.puzzleID,
+		puzzleSysEightA->puzzlePieceTwo.puzzleID };
+
+	puzzleSysEightA->puzzlePieceFour.puzzleID = "FightPH2.8A";
+	puzzleSysEightA->puzzlePieceFour.storyPart = 8;
+	puzzleSysEightA->puzzlePieceFour.storyScene = 'A';
+	puzzleSysEightA->puzzlePieceFour.puzzlePieceNum = 4;
+	puzzleSysEightA->puzzlePieceFour.lastPiece = true;
+	puzzleSysEightA->puzzlePieceFour.spriteID = "FightPH2";
+	puzzleSysEightA->puzzlePieceFour.transform = std::vector<int>{ 800, 200, 32, 32, 2 };
+	puzzleSysEightA->puzzlePieceFour.dependencies = std::vector<std::string>{ puzzleSysEightA->puzzlePieceOne.puzzleID,
+		puzzleSysEightA->puzzlePieceTwo.puzzleID, puzzleSysEightA->puzzlePieceThree.puzzleID };
+
+	// Scene B
+	puzzleSysEightB->puzzlePieceOne.puzzleID = "NoosePH.8B";
+	puzzleSysEightB->puzzlePieceOne.storyPart = 8;
+	puzzleSysEightB->puzzlePieceOne.storyScene = 'B';
+	puzzleSysEightB->puzzlePieceOne.puzzlePieceNum = 1;
+	puzzleSysEightB->puzzlePieceOne.lastPiece = false;
+	puzzleSysEightB->puzzlePieceOne.spriteID = "NoosePH";
+	puzzleSysEightB->puzzlePieceOne.transform = std::vector<int>{ 200, 200, 32, 32, 2 };
+	puzzleSysEightB->puzzlePieceOne.dependencies = std::vector<std::string>{};
+
+	puzzleSysEightB->puzzlePieceTwo.puzzleID = "LittleJohnPH.8B";
+	puzzleSysEightB->puzzlePieceTwo.storyPart = 8;
+	puzzleSysEightB->puzzlePieceTwo.storyScene = 'B';
+	puzzleSysEightB->puzzlePieceTwo.puzzlePieceNum = 2;
+	puzzleSysEightB->puzzlePieceTwo.lastPiece = false;
+	puzzleSysEightB->puzzlePieceTwo.spriteID = "LittleJohnPH";
+	puzzleSysEightB->puzzlePieceTwo.transform = std::vector<int>{ 400, 200, 32, 32, 2 };
+	puzzleSysEightB->puzzlePieceTwo.dependencies = std::vector<std::string>{ puzzleSysEightB->puzzlePieceOne.puzzleID };
+
+	puzzleSysEightB->puzzlePieceThree.puzzleID = "FightPH.8B";
+	puzzleSysEightB->puzzlePieceThree.storyPart = 8;
+	puzzleSysEightB->puzzlePieceThree.storyScene = 'B';
+	puzzleSysEightB->puzzlePieceThree.puzzlePieceNum = 3;
+	puzzleSysEightB->puzzlePieceThree.lastPiece = false;
+	puzzleSysEightB->puzzlePieceThree.spriteID = "FightPH";
+	puzzleSysEightB->puzzlePieceThree.transform = std::vector<int>{ 600, 200, 32, 32, 2 };
+	puzzleSysEightB->puzzlePieceThree.dependencies = std::vector<std::string>{ puzzleSysEightB->puzzlePieceOne.puzzleID,
+		puzzleSysEightB->puzzlePieceTwo.puzzleID };
+
+	puzzleSysEightB->puzzlePieceFour.puzzleID = "FightPH2.8B";
+	puzzleSysEightB->puzzlePieceFour.storyPart = 8;
+	puzzleSysEightB->puzzlePieceFour.storyScene = 'B';
+	puzzleSysEightB->puzzlePieceFour.puzzlePieceNum = 4;
+	puzzleSysEightB->puzzlePieceFour.lastPiece = true;
+	puzzleSysEightB->puzzlePieceFour.transform = std::vector<int>{ 800, 200, 32, 32, 2 };
+	puzzleSysEightB->puzzlePieceFour.dependencies = std::vector<std::string>{ puzzleSysEightB->puzzlePieceOne.puzzleID,
+		puzzleSysEightB->puzzlePieceTwo.puzzleID, puzzleSysEightB->puzzlePieceThree.puzzleID };
+
+#pragma endregion Part8System
+
+	puzzleSysEightA->CreateBaseEntity(4);
+	puzzleSysEightB->CreateBaseEntity(4);
+
+#pragma region Part9System
+
+	// Scene A
+	puzzleSysNineA->puzzlePieceOne.puzzleID = "SheriffPH.9A";
+	puzzleSysNineA->puzzlePieceOne.storyPart = 9;
+	puzzleSysNineA->puzzlePieceOne.storyScene = 'A';
+	puzzleSysNineA->puzzlePieceOne.puzzlePieceNum = 1;
+	puzzleSysNineA->puzzlePieceOne.lastPiece = false;
+	puzzleSysNineA->puzzlePieceOne.spriteID = "SheriffPH";
+	puzzleSysNineA->puzzlePieceOne.transform = std::vector<int>{ 200, 200, 32, 32, 2 };
+	puzzleSysNineA->puzzlePieceOne.dependencies = std::vector<std::string>{};
+
+	puzzleSysNineA->puzzlePieceTwo.puzzleID = "FightPH.9A";
+	puzzleSysNineA->puzzlePieceTwo.storyPart = 9;
+	puzzleSysNineA->puzzlePieceTwo.storyScene = 'A';
+	puzzleSysNineA->puzzlePieceTwo.puzzlePieceNum = 2;
+	puzzleSysNineA->puzzlePieceTwo.lastPiece = true;
+	puzzleSysNineA->puzzlePieceTwo.spriteID = "FightPH";
+	puzzleSysNineA->puzzlePieceTwo.transform = std::vector<int>{ 400, 200, 32, 32, 2 };
+	puzzleSysNineA->puzzlePieceTwo.dependencies = std::vector<std::string>{ puzzleSysNineA->puzzlePieceOne.puzzleID };
+
+#pragma endregion Part9System
 	
 #pragma endregion PuzzleSystemsCreation
 
@@ -1477,13 +1751,6 @@ void GameMode::Part2SceneA()
 	// Delete old entities and maps, Manage Puzzle
 	puzzleSysOneE->DestroyPuzzlePieces(1, 'E');
 	assets->ClearPuzzlePieceMap(1, 'E');
-	puzzleSysZero->~PuzzleSystem();
-	puzzleSysZeroB->~PuzzleSystem();
-	puzzleSysOneA->~PuzzleSystem();
-	puzzleSysOneB->~PuzzleSystem();
-	puzzleSysOneC->~PuzzleSystem();
-	puzzleSysOneD->~PuzzleSystem();
-	puzzleSysOneE->~PuzzleSystem();
 }
 
 void GameMode::Part2SceneB()
@@ -1550,6 +1817,13 @@ void GameMode::Part2SceneC()
 	// Delete old entities and maps, Manage Puzzle
 	puzzleSysTwoB->DestroyPuzzlePieces(2, 'B');
 	assets->ClearPuzzlePieceMap(2, 'B');
+	puzzleSysZero->~PuzzleSystem();
+	puzzleSysZeroB->~PuzzleSystem();
+	puzzleSysOneA->~PuzzleSystem();
+	puzzleSysOneB->~PuzzleSystem();
+	puzzleSysOneC->~PuzzleSystem();
+	puzzleSysOneD->~PuzzleSystem();
+	puzzleSysOneE->~PuzzleSystem();
 }
 
 #pragma endregion Part2Loads
@@ -1596,10 +1870,10 @@ void GameMode::Part3SceneA()
 
 void GameMode::Part4SceneA()
 {
-	std::cout << "Part4SceneA()" << std::endl;
+	std::cout << "\nPart4SceneA()" << std::endl;
 
 	// Output Story Point
-	std::cout << "\nStory Point: Robin fights Friar Tuck, while looking for him to help with an arranged marriage, "<<
+	std::cout << "Story Point: Robin fights Friar Tuck, while looking for him to help with an arranged marriage, "<<
 		"in a river. During the fight the learn who the other is and Friar Tuck joins Robin and his merry men." << std::endl;
 
 	// Set previous puzzle to solved
@@ -1624,10 +1898,10 @@ void GameMode::Part4SceneA()
 
 void GameMode::Part4SceneB()
 {
-	std::cout << "Part4SceneB()" << std::endl;
+	std::cout << "\nPart4SceneB()" << std::endl;
 
 	// Output Story Point
-	std::cout << "\nStory Point: Robin disguised himself as a harp player and infiltrates the wedding. " <<
+	std::cout << "Story Point: Robin disguised himself as a harp player and infiltrates the wedding. " <<
 		"He along with his men are able to help A'Dale. A'Dale joins Robin." << std::endl;
 
 	// Set previous puzzle to solved
@@ -1648,6 +1922,7 @@ void GameMode::Part4SceneB()
 	// Delete old entities and maps, Manage Puzzle
 	puzzleSysFourA->DestroyPuzzlePieces(4, 'A');
 	assets->ClearPuzzlePieceMap(4, 'A');
+	puzzleSysThreeA->~PuzzleSystem();
 }
 
 #pragma endregion Part4Loads
@@ -1656,22 +1931,32 @@ void GameMode::Part4SceneB()
 
 void GameMode::Part5SceneA()
 {
-	std::cout << "Part5SceneA()" << std::endl;
+	std::cout << "\nPart5SceneA()" << std::endl;
 
 	// Output Story Point
-	std::cout << "\nStory Point: Robin attends and wins first archery competion while disguised" << std::endl;
+	std::cout << "Story Point: Robin meets Sir Richard and learns his tragic tale. He meets the bishops, takes their " <<
+		"money and gives it to Sir Richard to get his land back." << std::endl;
 
 	// Set previous puzzle to solved
+	puzzleSysFourB->SetPuzzleStatus(true);
 
 	// Update story scene, and story part when required
+	SetStoryPart(5);
+	SetStoryScene('A');
 
 	// Add components to entities
+	puzzleSysFiveA->AddEntityComponents();
 
 	// Update background scene
+	UpdateBackgroundScene("SherwoodForestB1");
 
 	// Character management, if required
 
 	// Delete old entities and maps, Manage Puzzle
+	puzzleSysFourB->DestroyPuzzlePieces(4, 'B');
+	assets->ClearPuzzlePieceMap(4, 'B');
+	puzzleSysFourA->~PuzzleSystem();
+	puzzleSysFourB->~PuzzleSystem();
 }
 
 #pragma endregion Part5Loads
@@ -1680,42 +1965,57 @@ void GameMode::Part5SceneA()
 
 void GameMode::Part6SceneA()
 {
-	std::cout << "Part6SceneA()" << std::endl;
+	std::cout << "\nPart6SceneA()" << std::endl;
 
 	// Output Story Point
-	std::cout << "\nStory Point: Robin attends and wins first archery competion while disguised" << std::endl;
+	std::cout << "Story Point: Robin encounters a single beggar, ends up fighting him, then they trade clothes" << std::endl;
 
 	// Set previous puzzle to solved
+	puzzleSysFiveA->SetPuzzleStatus(true);
 
 	// Update story scene, and story part when required
+	SetStoryPart(6);
+	SetStoryScene('A');
 
 	// Add components to entities
+	puzzleSysSixA->AddEntityComponents();
 
 	// Update background scene
+	UpdateBackgroundScene("RoadToNottingham2");
 
 	// Character management, if required
 
 	// Delete old entities and maps, Manage Puzzle
+	puzzleSysFiveA->DestroyPuzzlePieces(5, 'A');
+	assets->ClearPuzzlePieceMap(5, 'A');
 }
 
 void GameMode::Part6SceneB()
 {
-	std::cout << "Part6SceneB()" << std::endl;
+	std::cout << "\nPart6SceneB()" << std::endl;
 
 	// Output Story Point
-	std::cout << "\nStory Point: Robin attends and wins first archery competion while disguised" << std::endl;
+	std::cout << "Story Point: Robin encounters four beggars, fights them, two flee. They are pretending to be lame and deaf" << std::endl;
 
 	// Set previous puzzle to solved
+	puzzleSysSixA->SetPuzzleStatus(true);
 
 	// Update story scene, and story part when required
+	SetStoryPart(6);
+	SetStoryScene('B');
 
 	// Add components to entities
+	puzzleSysSixB->AddEntityComponents();
 
 	// Update background scene
+	UpdateBackgroundScene("NottinghamOuter");
 
 	// Character management, if required
 
 	// Delete old entities and maps, Manage Puzzle
+	puzzleSysSixA->DestroyPuzzlePieces(6, 'A');
+	assets->ClearPuzzlePieceMap(6, 'A');
+	puzzleSysFiveA->~PuzzleSystem();
 }
 
 #pragma endregion Part6Loads
@@ -1727,19 +2027,27 @@ void GameMode::Part7SceneA()
 	std::cout << "Part7SceneA()" << std::endl;
 
 	// Output Story Point
-	std::cout << "\nStory Point: Robin attends and wins first archery competion while disguised" << std::endl;
+	std::cout << "\nStory Point: Robin and his men attend archery competition at the request of the queen. "<<
+		"They are not disguised." << std::endl;
 
 	// Set previous puzzle to solved
+	puzzleSysSixB->SetPuzzleStatus(true);
 
 	// Update story scene, and story part when required
+	SetStoryPart(7);
+	SetStoryScene('A');
 
 	// Add components to entities
+	puzzleSysSevenA->AddEntityComponents();
 
 	// Update background scene
+	UpdateBackgroundScene("ArcheryComp1");
 
 	// Character management, if required
 
 	// Delete old entities and maps, Manage Puzzle
+	puzzleSysSixA->DestroyPuzzlePieces(6, 'B');
+	assets->ClearPuzzlePieceMap(6, 'B');
 }
 
 void GameMode::Part7SceneB()
@@ -1747,19 +2055,29 @@ void GameMode::Part7SceneB()
 	std::cout << "Part7SceneB()" << std::endl;
 
 	// Output Story Point
-	std::cout << "\nStory Point: Robin attends and wins first archery competion while disguised" << std::endl;
+	std::cout << "\nStory Point: After winning the archery competition, Robin is on the run from the King and his men. " << 
+		"Robin is looking for a place to hide." << std::endl;
 
 	// Set previous puzzle to solved
+	puzzleSysSevenB->SetPuzzleStatus(true);
 
 	// Update story scene, and story part when required
+	SetStoryPart(7);
+	SetStoryScene('B');
 
 	// Add components to entities
+	puzzleSysSevenB->AddEntityComponents();
 
 	// Update background scene
+	UpdateBackgroundScene("SherwoodForest2");
 
 	// Character management, if required
 
 	// Delete old entities and maps, Manage Puzzle
+	puzzleSysSevenA->DestroyPuzzlePieces(7, 'A');
+	assets->ClearPuzzlePieceMap(7, 'A');
+	puzzleSysSixA->~PuzzleSystem();
+	puzzleSysSixB->~PuzzleSystem();
 }
 
 #pragma endregion Part7Loads
@@ -1771,19 +2089,29 @@ void GameMode::Part8SceneA()
 	std::cout << "Part8SceneA()" << std::endl;
 
 	// Output Story Point
-	std::cout << "\nStory Point: Robin attends and wins first archery competion while disguised" << std::endl;
+	std::cout << "\nStory Point: Guy of Gisbourne finds Robin in hiding in Sherwood Forest without realizing he found Robin. " <<
+		"They engage in a friendly archery competition. Gisbourne shoots very well, but when Robin outshoots him, " <<
+		"Guy determines that he found Robin. A fight ensues, but Robin wins and kills Gisbourne. This is the first murder Robin " <<
+		"has commited since the ranger when he was 18. Robin takes Gisbourne's clothes to disguise hilmself." << std::endl;
 
 	// Set previous puzzle to solved
+	puzzleSysSevenB->SetPuzzleStatus(true);
 
 	// Update story scene, and story part when required
+	SetStoryPart(8);
+	SetStoryScene('A');
 
 	// Add components to entities
+	puzzleSysEightA->AddEntityComponents();
 
 	// Update background scene
+	UpdateBackgroundScene("SherwoodForest1");
 
 	// Character management, if required
 
 	// Delete old entities and maps, Manage Puzzle
+	puzzleSysSevenB->DestroyPuzzlePieces(7, 'B');
+	assets->ClearPuzzlePieceMap(7, 'B');
 }
 
 void GameMode::Part8SceneB()
@@ -1791,19 +2119,29 @@ void GameMode::Part8SceneB()
 	std::cout << "Part8SceneB()" << std::endl;
 
 	// Output Story Point
-	std::cout << "\nStory Point: Robin attends and wins first archery competion while disguised" << std::endl;
+	std::cout << "\nStory Point: After Little John saved 3 boys from the noose, he now requires saving himself. " <<
+		"Robin, disguised as Gisbourne, saves Little John from the noose." << std::endl;
 
 	// Set previous puzzle to solved
+	puzzleSysEightA->SetPuzzleStatus(true);
 
 	// Update story scene, and story part when required
+	SetStoryPart(8);
+	SetStoryScene('B');
 
 	// Add components to entities
+	puzzleSysEightB->AddEntityComponents();
 
 	// Update background scene
+	UpdateBackgroundScene("HangmansNoose");
 
 	// Character management, if required
 
 	// Delete old entities and maps, Manage Puzzle
+	puzzleSysEightA->DestroyPuzzlePieces(8, 'A');
+	assets->ClearPuzzlePieceMap(8, 'A');
+	puzzleSysSevenA->~PuzzleSystem();
+	puzzleSysSevenB->~PuzzleSystem();
 }
 
 #pragma endregion Part8Loads
@@ -1815,19 +2153,30 @@ void GameMode::Part9SceneA()
 	std::cout << "Part9SceneA()" << std::endl;
 
 	// Output Story Point
-	std::cout << "\nStory Point: Robin attends and wins first archery competion while disguised" << std::endl;
+	std::cout << "\nStory Point: After being a ranger for the King, Robin returns to Sherwood Forest. He ends up fighting and killing the Sheriff. " <<
+		"The new sheriff and King agree to leave Robin and his men alone." << std::endl;
 
 	// Set previous puzzle to solved
+	puzzleSysEightB->SetPuzzleStatus(true);
 
 	// Update story scene, and story part when required
+	SetStoryPart(9);
+	SetStoryScene('A');
 
 	// Add components to entities
+	puzzleSysNineA->AddEntityComponents();
 
 	// Update background scene
+	UpdateBackgroundScene("PrologueScene");
 
 	// Character management, if required
 
 	// Delete old entities and maps, Manage Puzzle
+	puzzleSysEightB->DestroyPuzzlePieces(8, 'B');
+	assets->ClearPuzzlePieceMap(8, 'B');
+	puzzleSysEightA->~PuzzleSystem();
+	puzzleSysEightB->~PuzzleSystem();
+
 }
 
 #pragma endregion Part9Loads
