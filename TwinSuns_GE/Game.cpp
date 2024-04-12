@@ -48,7 +48,8 @@ PuzzleSystem* puzzleSysEightB; // For Part VIII Scene B
 PuzzleSystem* puzzleSysNineA; // For Part IX Scene A
 #pragma endregion PuzzleSystemInits
 
-// Graphics and input
+// Graphics, input, music
+Mix_Music* backgroundMusic = nullptr;
 SDL_Window* Game::window = nullptr;
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
@@ -65,6 +66,8 @@ bool Game::collisionCheck = false;
 // Some may need to be moved after prototype
 auto& player(manager.AddEntity());
 auto& backgroundScene(manager.AddEntity()); // Control the 'scene' of the game
+auto& expoHintUI(manager.AddEntity()); // Manage expo / hint UI
+auto& startEndUI(manager.AddEntity()); // Manage start / end game UI
 auto& basicUI(manager.AddEntity()); // Test UI
 auto& robinHood(manager.AddEntity()); // Robin Hood Character
 auto& littleJohn(manager.AddEntity()); // Little John Character
@@ -90,7 +93,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	gameMode = new GameMode();
 	timerEnemy = new AdvancedTimer();
 
-	// PuzzleSystem Instances
+	// PuzzleSystem Class Objects/Instances
 	puzzleSysZero = new PuzzleSystem(0, 'A');
 	puzzleSysZeroB = new PuzzleSystem(0, 'B');
 
@@ -159,9 +162,11 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 		{
 			SDL_SetRenderDrawColor(renderer, 71, 135, 120, 255);
 
-			std::cout << "Renderer Created\n\n\n\n" << std::endl;
+			std::cout << "Renderer Created" << std::endl;
 
 		}
+
+		
 
 		isRunning = true;
 	}
@@ -179,8 +184,28 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 		isRunning = false;
 	}
 
-	// Add fonts to asset manager/ font library
-	assets->AddFont("Arial", "Assets/arial.ttf", 16);
+	// Mixer init
+	if (Mix_Init(MIX_INIT_MP3) == -1)
+	{
+		std::cout << "SDL mixer failed to initialize" << std::endl;
+		// occurs if SDL is not init properly
+		isRunning = false;
+	}
+	else
+	{
+		if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+		{
+			std::cout << "Failed to open audio" << std::endl;
+		}
+		else
+		{
+			std::cout << "Audio Opened successfully" << std::endl;
+		}
+		std::cout << "SDL_mixer initialized correctly\n\n\n\n" << std::endl;
+
+	}
+
+#pragma region AssetLibrary
 
 	// Add textures to asset manager / texture library
 #pragma region TextureLibrary
@@ -288,8 +313,108 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	// User Interface
 	assets->AddTexture("Cursor", "Assets/UI/Cursor_rough.png");
 
+	// Exposition Scenes / Hint Scenes
+	assets->AddTexture("TitlePage", "Assets/Exposition/Exposition_Title.png");
+	assets->AddTexture("The_End", "Assets/Exposition/Exposition_End.png");
+	assets->AddTexture("Expo_0A", "Assets/Exposition/Exposition_0A.png");
+	assets->AddTexture("Expo_0B", "Assets/Exposition/Exposition_0B.png");
+	assets->AddTexture("Expo_1A", "Assets/Exposition/Exposition_1A.png");
+	assets->AddTexture("Expo_1B", "Assets/Exposition/Exposition_1B.png");
+	assets->AddTexture("Expo_1C", "Assets/Exposition/Exposition_1C.png");
+	assets->AddTexture("Expo_1D", "Assets/Exposition/Exposition_1D.png");
+	assets->AddTexture("Expo_1E", "Assets/Exposition/Exposition_1E.png");
+	assets->AddTexture("Expo_2A", "Assets/Exposition/Exposition_2A.png");
+	assets->AddTexture("Expo_2B", "Assets/Exposition/Exposition_2B.png");
+	assets->AddTexture("Expo_2C", "Assets/Exposition/Exposition_2C.png");
+	assets->AddTexture("Expo_3A", "Assets/Exposition/Exposition_3A.png");
+	assets->AddTexture("Expo_4A", "Assets/Exposition/Exposition_4A.png");
+	assets->AddTexture("Expo_4B", "Assets/Exposition/Exposition_4B.png");
+	assets->AddTexture("Expo_5A", "Assets/Exposition/Exposition_5A.png");
+	assets->AddTexture("Expo_6A", "Assets/Exposition/Exposition_6A.png");
+	assets->AddTexture("Expo_6B", "Assets/Exposition/Exposition_6B.png");
+	assets->AddTexture("Expo_7A", "Assets/Exposition/Exposition_7A.png");
+	assets->AddTexture("Expo_7B", "Assets/Exposition/Exposition_7B.png");
+	assets->AddTexture("Expo_8A", "Assets/Exposition/Exposition_8A.png");
+	assets->AddTexture("Expo_8B", "Assets/Exposition/Exposition_8B.png");
+	assets->AddTexture("Expo_9A", "Assets/Exposition/Exposition_9A.png");
+
 
 #pragma endregion TextureLibrary
+
+	// Add fonts to asset manager/ font library
+	assets->AddFont("Arial", "Assets/arial.ttf", 16);
+
+	// Add exposition to exposition library
+	// not in use
+#pragma region ExpositionLibrary
+	/*
+	assets->AddExpositionElem("0A", "Interaction w/ Ranger, shooting the deer and becoming an outlaw.");
+	assets->AddExpositionElem("0B", ("Robin meets Little John and engages him in a fight with quarter staffs. "
+		"Upon losing, Robin uses his horn to call the rest of his merry men. They convince Little John to join them."));
+
+	assets->AddExpositionElem("1A", ("Robin meets 'The Tinker' in Sherwood Forest. He is able to "
+		"convince him that he is not Robin Hood but he knows that Robin frequents the Blue Boar."
+		"The pair set off towards the Blue Boar"));
+	assets->AddExpositionElem("1B", "Getting The Tinker drunk and stealing his stuff");
+	assets->AddExpositionElem("1C", ("The Tinker woke up after Robin stole his things. He forces the owner"
+		" of the Blue Boar to tell him who stole his stuff and where they went. After making The Tinker"
+		" pay his bill with his weapons, the barmen tells The Tinker that Robin Hood is who he was "
+		"drinking with but not that Robin stole his things. The Tinker chases after Robin in Sherwood "
+		"When he catches Robin they fight, The Tinker breaks Robins staff, and then Robin uses his horn "
+		"to call his merry men. When they arrive they convince The Tinker to join them"));
+	assets->AddExpositionElem("1D", "Robin attends and wins first archery competion while disguised");
+	assets->AddExpositionElem("1E", "The rescue of Stutley from the noose and The Sheriff in Nottingham Square");
+
+	assets->AddExpositionElem("2A", "Robin pays the butcher to swap places with him and allow Robin to sell the wares in Nottingham Square");
+	assets->AddExpositionElem("2B", "Robin outsells all the other butchers at Nottingham Square");
+	assets->AddExpositionElem("2C", ("Robin tricks The Sheriff into eating with his merry men in Sherwood. He then forces The Sheriff to pay"
+		" for the feast. This is all for revenge because The Sheriff almost killed Will Stutley."));
+
+	assets->AddExpositionElem("3A", ("Robin runs into Will Scarlet in Sherwood Forest. Robin assumes Will is wealthy"
+		" due to his appearance. Robin loses to Will in a fight and then learns Will is his cousin."
+		" Will is on the run after accidentally killing someone. Robin invites will to join him and his merry men."));
+
+	assets->AddExpositionElem("4A", ("Robin fights Friar Tuck, while looking for him to help with an arranged marriage, "
+		"in a river. During the fight the learn who the other is and Friar Tuck joins Robin and his merry men"));
+	assets->AddExpositionElem("4B", ("Robin disguised himself as a harp player and infiltrates the wedding. "
+		"He along with his men are able to help A'Dale. A'Dale joins Robin."));
+
+	assets->AddExpositionElem("5A", ("Robin meets Sir Richard and learns his tragic tale. He meets the bishops, takes their "
+		"money and gives it to Sir Richard to get his land back."));
+
+	assets->AddExpositionElem("6A", "Robin encounters a single beggar, ends up fighting him, then they trade clothes");
+	assets->AddExpositionElem("6B", "Robin encounters four beggars, fights them, two flee. They are pretending to be lame and deaf");
+
+	assets->AddExpositionElem("7A", "Robin and his men attend archery competition at the request of the queen. They are not disguised.");
+	assets->AddExpositionElem("7B", ("After winning the archery competition, Robin is on the run from the King and his men." 
+		"Robin is looking for a place to hide."));
+
+	assets->AddExpositionElem("8A", ("Guy of Gisbourne finds Robin in hiding in Sherwood Forest without realizing he found Robin. "
+		"They engage in a friendly archery competition. Gisbourne shoots very well, but when Robin outshoots him, " 
+		"Guy determines that he found Robin. A fight ensues, but Robin wins and kills Gisbourne. This is the first murder Robin "
+		"has commited since the ranger when he was 18. Robin takes Gisbourne's clothes to disguise hilmself."));
+	assets->AddExpositionElem("8B", ("After Little John saved 3 boys from the noose, he now requires saving himself. "
+		"Robin, disguised as Gisbourne, saves Little John from the noose."));
+
+	assets->AddExpositionElem("9A", ("After being a ranger for the King, Robin returns to Sherwood Forest. He ends up fighting and killing the Sheriff. "
+		"The new sheriff and King agree to leave Robin and his men alone."));
+	*/
+	
+
+#pragma endregion ExpositionLibrary
+
+#pragma endregion AssetLibrary
+
+	// Media Load
+	if (MediaLoader() == false)
+	{
+		std::cout << "MediaLoader failed" << std::endl;
+		//isRunning = false;
+	}
+	else
+	{
+		gameMode->PlayBackgroundMusic();
+	}
 
 	map = new TextureMap();
 
@@ -552,7 +677,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	puzzleSysTwoB->puzzlePieceOne.puzzlePieceNum = 1;
 	puzzleSysTwoB->puzzlePieceOne.lastPiece = false;
 	puzzleSysTwoB->puzzlePieceOne.spriteID = "PorkRibs";
-	puzzleSysTwoB->puzzlePieceOne.transform = std::vector<int>{ 200, 200, 32, 32, 2 };
+	puzzleSysTwoB->puzzlePieceOne.transform = std::vector<int>{ 200, 200, 64, 32, 2 };
 	puzzleSysTwoB->puzzlePieceOne.dependencies = std::vector<std::string>{};
 
 	puzzleSysTwoB->puzzlePieceTwo.puzzleID = "TurkeyLeg.2B";
@@ -562,7 +687,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	puzzleSysTwoB->puzzlePieceTwo.lastPiece = false;
 	puzzleSysTwoB->puzzlePieceTwo.spriteID = "TurkeyLeg";
 	puzzleSysTwoB->puzzlePieceTwo.transform = std::vector<int>{ 400, 200, 32, 32, 2 };
-	puzzleSysTwoB->puzzlePieceTwo.dependencies = std::vector<std::string>{ "PorkRibs.2B" };
+	puzzleSysTwoB->puzzlePieceTwo.dependencies = std::vector<std::string>{};
 
 	puzzleSysTwoB->puzzlePieceThree.puzzleID = "Steak.2B";
 	puzzleSysTwoB->puzzlePieceThree.storyPart = 2;
@@ -571,7 +696,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	puzzleSysTwoB->puzzlePieceThree.lastPiece = false;
 	puzzleSysTwoB->puzzlePieceThree.spriteID = "Steak";
 	puzzleSysTwoB->puzzlePieceThree.transform = std::vector<int>{ 600, 200, 32, 32, 2 };
-	puzzleSysTwoB->puzzlePieceThree.dependencies = std::vector<std::string>{ "PorkRibs.2B", "TurkeyLeg.2B" };
+	puzzleSysTwoB->puzzlePieceThree.dependencies = std::vector<std::string>{};
 
 	puzzleSysTwoB->puzzlePieceFour.puzzleID = "CoinStack.2B";
 	puzzleSysTwoB->puzzlePieceFour.storyPart = 2;
@@ -589,7 +714,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	puzzleSysTwoC->puzzlePieceOne.puzzlePieceNum = 1;
 	puzzleSysTwoC->puzzlePieceOne.lastPiece = false;
 	puzzleSysTwoC->puzzlePieceOne.spriteID = "Wine";
-	puzzleSysTwoC->puzzlePieceOne.transform = std::vector<int>{ 400, 600, 32, 32, 2 };
+	puzzleSysTwoC->puzzlePieceOne.transform = std::vector<int>{ 200, 200, 32, 32, 2 };
 	puzzleSysTwoC->puzzlePieceOne.dependencies = std::vector<std::string>{};
 
 	puzzleSysTwoC->puzzlePieceTwo.puzzleID = "TurkeyLeg.2C";
@@ -598,7 +723,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	puzzleSysTwoC->puzzlePieceTwo.puzzlePieceNum = 2;
 	puzzleSysTwoC->puzzlePieceTwo.lastPiece = false;
 	puzzleSysTwoC->puzzlePieceTwo.spriteID = "TurkeyLeg";
-	puzzleSysTwoC->puzzlePieceTwo.transform = std::vector<int>{ 200, 600, 32, 32, 2 };
+	puzzleSysTwoC->puzzlePieceTwo.transform = std::vector<int>{ 400, 200, 32, 32, 2 };
 	puzzleSysTwoC->puzzlePieceTwo.dependencies = std::vector<std::string>{ "Wine.2C" };
 
 	puzzleSysTwoC->puzzlePieceThree.puzzleID = "CoinPurse.2C";
@@ -607,7 +732,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	puzzleSysTwoC->puzzlePieceThree.puzzlePieceNum = 3;
 	puzzleSysTwoC->puzzlePieceThree.lastPiece = true;
 	puzzleSysTwoC->puzzlePieceThree.spriteID = "CoinPurse";
-	puzzleSysTwoC->puzzlePieceThree.transform = std::vector<int>{ 600, 600, 32, 32, 2 };
+	puzzleSysTwoC->puzzlePieceThree.transform = std::vector<int>{ 600, 200, 32, 32, 2 };
 	puzzleSysTwoC->puzzlePieceThree.dependencies = std::vector<std::string>{ "Wine.2C", "TurkeyLeg.2C"};
 
 #pragma endregion Part2System
@@ -625,7 +750,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	puzzleSysThreeA->puzzlePieceOne.puzzlePieceNum = 1;
 	puzzleSysThreeA->puzzlePieceOne.lastPiece = false;
 	puzzleSysThreeA->puzzlePieceOne.spriteID = "QuarterStaff";
-	puzzleSysThreeA->puzzlePieceOne.transform = std::vector<int>{ 600, 600, 32, 32, 4 };
+	puzzleSysThreeA->puzzlePieceOne.transform = std::vector<int>{ 200, 200, 32, 32, 4 };
 	puzzleSysThreeA->puzzlePieceOne.dependencies = std::vector<std::string>{};
 
 	puzzleSysThreeA->puzzlePieceTwo.puzzleID = "ScarletPH.3A";
@@ -634,7 +759,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	puzzleSysThreeA->puzzlePieceTwo.puzzlePieceNum = 2;
 	puzzleSysThreeA->puzzlePieceTwo.lastPiece = false;
 	puzzleSysThreeA->puzzlePieceTwo.spriteID = "ScarletPH";
-	puzzleSysThreeA->puzzlePieceTwo.transform = std::vector<int>{ 400, 400, 32, 32, 4 };
+	puzzleSysThreeA->puzzlePieceTwo.transform = std::vector<int>{ 400, 200, 32, 32, 2 };
 	puzzleSysThreeA->puzzlePieceTwo.dependencies = std::vector<std::string>{ "QuarterStaff.3A" };
 
 	puzzleSysThreeA->puzzlePieceThree.puzzleID = "FightPH.3A";
@@ -643,7 +768,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	puzzleSysThreeA->puzzlePieceThree.puzzlePieceNum = 3;
 	puzzleSysThreeA->puzzlePieceThree.lastPiece = true;
 	puzzleSysThreeA->puzzlePieceThree.spriteID = "FightPH";
-	puzzleSysThreeA->puzzlePieceThree.transform = std::vector<int>{ 800, 400, 32, 32, 4 };
+	puzzleSysThreeA->puzzlePieceThree.transform = std::vector<int>{ 600, 200, 32, 32, 2 };
 	puzzleSysThreeA->puzzlePieceThree.dependencies = std::vector<std::string>{ "QuarterStaff.3A", "ScarletPH.3A" };
 
 #pragma endregion Part3System
@@ -696,7 +821,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	puzzleSysFourB->puzzlePieceOne.puzzlePieceNum = 1;
 	puzzleSysFourB->puzzlePieceOne.lastPiece = false;
 	puzzleSysFourB->puzzlePieceOne.spriteID = "Shirt_BlueGray";
-	puzzleSysFourB->puzzlePieceOne.transform = std::vector<int>{ 200, 200, 32, 32, 2 };
+	puzzleSysFourB->puzzlePieceOne.transform = std::vector<int>{ 200, 200, 64, 64, 2 };
 	puzzleSysFourB->puzzlePieceOne.dependencies = std::vector<std::string>{};
 
 	puzzleSysFourB->puzzlePieceTwo.puzzleID = "Hat_Red.4B";
@@ -705,7 +830,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	puzzleSysFourB->puzzlePieceTwo.puzzlePieceNum = 2;
 	puzzleSysFourB->puzzlePieceTwo.lastPiece = false;
 	puzzleSysFourB->puzzlePieceTwo.spriteID = "Hat_Red";
-	puzzleSysFourB->puzzlePieceTwo.transform = std::vector<int>{ 400, 200, 32, 32, 2 };
+	puzzleSysFourB->puzzlePieceTwo.transform = std::vector<int>{ 400, 200, 64, 64, 1 };
 	puzzleSysFourB->puzzlePieceTwo.dependencies = std::vector<std::string>{ "Shirt_BlueGray.4B" };
 
 	puzzleSysFourB->puzzlePieceThree.puzzleID = "Harp.4B";
@@ -714,7 +839,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	puzzleSysFourB->puzzlePieceThree.puzzlePieceNum = 3;
 	puzzleSysFourB->puzzlePieceThree.lastPiece = true;
 	puzzleSysFourB->puzzlePieceThree.spriteID = "Harp";
-	puzzleSysFourB->puzzlePieceThree.transform = std::vector<int>{ 600, 200, 32, 32, 2 };
+	puzzleSysFourB->puzzlePieceThree.transform = std::vector<int>{ 600, 200, 64, 64, 2 };
 	puzzleSysFourB->puzzlePieceThree.dependencies = std::vector<std::string>{ puzzleSysFourB->puzzlePieceOne.puzzleID, 
 		puzzleSysFourB->puzzlePieceTwo.puzzleID };
 
@@ -776,7 +901,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	puzzleSysSixA->puzzlePieceTwo.puzzlePieceNum = 2;
 	puzzleSysSixA->puzzlePieceTwo.lastPiece = true;
 	puzzleSysSixA->puzzlePieceTwo.spriteID = "Cloak_Brown";
-	puzzleSysSixA->puzzlePieceTwo.transform = std::vector<int>{ 400, 200, 32, 32, 2 };
+	puzzleSysSixA->puzzlePieceTwo.transform = std::vector<int>{ 400, 200, 64, 128, 1 };
 	puzzleSysSixA->puzzlePieceTwo.dependencies = std::vector<std::string>{ puzzleSysSixA->puzzlePieceOne.puzzleID };
 
 	// Scene B
@@ -953,6 +1078,7 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	puzzleSysEightB->puzzlePieceFour.storyScene = 'B';
 	puzzleSysEightB->puzzlePieceFour.puzzlePieceNum = 4;
 	puzzleSysEightB->puzzlePieceFour.lastPiece = true;
+	puzzleSysEightB->puzzlePieceFour.spriteID = "FightPH2";
 	puzzleSysEightB->puzzlePieceFour.transform = std::vector<int>{ 800, 200, 32, 32, 2 };
 	puzzleSysEightB->puzzlePieceFour.dependencies = std::vector<std::string>{ puzzleSysEightB->puzzlePieceOne.puzzleID,
 		puzzleSysEightB->puzzlePieceTwo.puzzleID, puzzleSysEightB->puzzlePieceThree.puzzleID };
@@ -984,6 +1110,8 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 	puzzleSysNineA->puzzlePieceTwo.dependencies = std::vector<std::string>{ puzzleSysNineA->puzzlePieceOne.puzzleID };
 
 #pragma endregion Part9System
+
+	puzzleSysNineA->CreateBaseEntity(2);
 	
 #pragma endregion PuzzleSystemsCreation
 
@@ -1029,6 +1157,15 @@ void Game::Init(const char* title, int xPos, int yPos, int width, int height, bo
 
 	// User Interface Objects
 	SDL_Color white = { 255, 255, 255, 255 };
+
+	expoHintUI.addComponent<TransformComponent>(0.0f, 0.0f, 1600, 1000, 1);
+	expoHintUI.addComponent<SpriteComponent>("Expo_0A", true);
+	expoHintUI.AddGroup(groupUI);
+
+	startEndUI.addComponent<TransformComponent>(0.0f, 0.0f, 1600, 1000, 1);
+	startEndUI.addComponent<SpriteComponent>("TitlePage", true);
+	startEndUI.AddGroup(groupUI_Top);
+
 	basicUI.addComponent<UserInterface>(400, 400, "Test", "Arial", white);
 
 #pragma endregion ComponentCreation
@@ -1041,6 +1178,7 @@ auto& scenes(manager.GetGroup(Game::groupScenes));
 auto& characterSprites(manager.GetGroup(Game::groupCharacterSprites));
 auto& puzzlePieces(manager.GetGroup(Game::groupPuzzlePieces));
 auto& userInterface(manager.GetGroup(Game::groupUI));
+auto& userInterfaceTop(manager.GetGroup(Game::groupUI_Top));
 
 // Handle SDL events
 void Game::HandleEvents()
@@ -1115,6 +1253,11 @@ void Game::Render()
 	{
 		i->Draw();
 	}
+
+	for (auto& i : userInterfaceTop)
+	{
+		i->Draw();
+	}
 	
 	SDL_RenderPresent(renderer);
 }
@@ -1124,8 +1267,11 @@ void Game::Clean()
 	SDL_SetWindowMouseGrab(window, SDL_FALSE);
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
+	Mix_FreeMusic(backgroundMusic);
+	backgroundMusic = NULL;
 	IMG_Quit();
 	TTF_Quit();
+	Mix_Quit();
 	SDL_Quit();
 
 	std::cout << "Game Cleaned" << std::endl;
@@ -1134,6 +1280,20 @@ void Game::Clean()
 bool Game::Running()
 {
 	return isRunning;
+}
+
+bool Game::MediaLoader()
+{
+	bool loadSuccess = true;
+
+	backgroundMusic = Mix_LoadMUS("Assets/OtherMedia/backgroundMusic_Fantasy.mp3");
+
+	if (backgroundMusic == NULL)
+	{
+		loadSuccess = false;
+	}
+
+	return loadSuccess;
 }
 
 void Game::DisplayText()
@@ -1166,17 +1326,9 @@ void Game::DebugOne()
 {
 	std::cout << "DebugOne()" << std::endl;
 	
-	std::cout << "puzzleSysTwoB map size: " << assets->GetMapSize() << std::endl;
+	std::cout << "0B Exposition\n" << std::endl;
+	std::cout << assets->GetExpositionElem("0B") << std::endl;
 
-	std::cout << "puzzleSysTwoB map element ids" << std::endl;
-	assets->GetMapElements();
-
-	std::cout << "Manual ID PRINT" << std::endl;
-	std::cout << "------------------------------" << std::endl;
-	std::cout << "puzzleSysTwoB->puzzlePieceOne.puzzleID: " << puzzleSysTwoB->puzzlePieceOne.puzzleID << std::endl;
-	std::cout << "puzzleSysTwoB->puzzlePieceTwo.puzzleID: " << puzzleSysTwoB->puzzlePieceTwo.puzzleID << std::endl;
-	std::cout << "puzzleSysTwoB->puzzlePieceThree.puzzleID: " << puzzleSysTwoB->puzzlePieceThree.puzzleID << std::endl;
-	std::cout << "puzzleSysTwoB->puzzlePieceFour.puzzleID: " << puzzleSysTwoB->puzzlePieceFour.puzzleID << std::endl;
 }
 
 void Game::AddTileFuture(int srcX, int srcY, int posX, int posY)
@@ -1193,6 +1345,8 @@ void Game::AddTileFuture(int srcX, int srcY, int posX, int posY)
 
 int GameMode::storyPart = 0;
 char GameMode::storyScene = 'A';
+bool GameMode::expoHintActive = true;
+bool GameMode::startEndUIActive = true;
 
 GameMode::GameMode()
 {
@@ -1277,6 +1431,27 @@ char GameMode::GetStoryScene()
 {
 	return storyScene;
 }
+
+void GameMode::SetExpoHintActive(bool val)
+{
+	expoHintActive = val;
+}
+
+bool GameMode::GetExpoHintActive()
+{
+	return expoHintActive;
+}
+
+void GameMode::SetStartEndUIActive(bool val)
+{
+	startEndUIActive = val;
+}
+
+bool GameMode::GetStartEndUIActive()
+{
+	return startEndUIActive;
+}
+
 #pragma endregion GetSet
 
 // Function is called from PuzzlePieceComponent
@@ -1453,11 +1628,8 @@ void GameMode::ManageStoryPart(int part, char scene)
 		if (storyScene == 'A')
 		{
 			std::cout << "ManageStoryPart() Part: 9, Scene: A" << std::endl;
-			break;
-		}
-		else
-		{
 			GameComplete();
+			break;
 		}
 		break;
 
@@ -1513,27 +1685,99 @@ void GameMode::PuzzlePieceInteraction()
 	clickedPuzzlePiece->getComponent<PuzzlePieceComponent>().SetClickStatus(true);
 }
 
+void GameMode::HintRequestToggle()
+{
+	if (!GetExpoHintActive())
+	{
+		expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+		SetExpoHintActive(true);
+	}
+	else if (GetExpoHintActive())
+	{
+		expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(false);
+		SetExpoHintActive(false);
+	}
+}
+
+void GameMode::PlayBackgroundMusic()
+{
+
+	Mix_PlayMusic(backgroundMusic, -1);
+
+	if (Mix_PlayingMusic() == 0)
+	{
+		std::cout << "Background music failed to play" << std::endl;
+	}
+
+}
+
+void GameMode::PauseBGMusic()
+{
+	Mix_PauseMusic();
+
+	if (Mix_PausedMusic == 0)
+	{
+		std::cout << "Background music failed to pause" << std::endl;
+	}
+}
+
+void GameMode::ResumeBGMusic()
+{
+	Mix_ResumeMusic();
+
+	if (Mix_PlayingMusic() == 0)
+	{
+		std::cout << "Background music failed to resume play" << std::endl;
+	}
+}
+
+void GameMode::StopBGMusic()
+{
+	Mix_HaltMusic();
+
+	if (Mix_PlayingMusic() == 1)
+	{
+		std::cout << "Background music failed to stop" << std::endl;
+	}
+}
+
 #pragma region PrologueLoads
+
+// Scene A
+void GameMode::PrologueSceneA()
+{
+
+}
+
+// Scene B
 void GameMode::PrologueSceneB()
 {
 	std::cout << "\nPrologueSceneB() GameMode Loader" << std::endl;
 
 	// Output Story Point
-	std::cout << "\nStory Point: Robin meets Little John and engages him in a fight" <<
+	std::cout << "Story Point: Robin meets Little John and engages him in a fight" <<
 		" with quarter staffs. Upon losing, Robin uses his horn to call the rest of his " <<
-		"merry men. They convince Little John to join them.\n" << std::endl;
+		"merry men. They convince Little John to join them." << std::endl;
 
 	// Set previous puzzle to solved
 	puzzleSysZero->SetPuzzleStatus(true);
 
 	// Update story scene, and story part when required
+	SetStoryPart(0);
 	SetStoryScene('B');
+
+	
 
 	// Add components to entities
 	puzzleSysZeroB->AddEntityComponents();
 
 	// Update background scene
 	backgroundScene.getComponent<SpriteComponent>().SetNewTexture("RobinFightsLJ");
+
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_0B");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
 
 	// Character management, if required
 	robinHood.getComponent<SpriteComponent>().SetNewTexture("RobinSpriteQS");
@@ -1544,14 +1788,6 @@ void GameMode::PrologueSceneB()
 	puzzleSysZero->DestroyPuzzlePieces(0, 'A');
 	assets->ClearPuzzlePieceMap(0, 'A');
 
-	// Update puzzle piece assets, old code
-	/*
-	assets->GetPuzzlePiece(puzzleSysZero->puzzlePieceOne.puzzleID)->getComponent<SpriteComponent>().SetToggleDraw(false);
-	assets->GetPuzzlePiece(puzzleSysZero->puzzlePieceTwo.puzzleID)->getComponent<SpriteComponent>().SetToggleDraw(false);
-	assets->GetPuzzlePiece(puzzleSysZeroB->puzzlePieceOne.puzzleID)->getComponent<SpriteComponent>().SetToggleDraw(true);
-	assets->GetPuzzlePiece(puzzleSysZeroB->puzzlePieceTwo.puzzleID)->getComponent<SpriteComponent>().SetToggleDraw(true);
-	assets->GetPuzzlePiece(puzzleSysZeroB->puzzlePieceThree.puzzleID)->getComponent<SpriteComponent>().SetToggleDraw(true);
-	*/
 }
 #pragma endregion PrologueLoads
 
@@ -1577,6 +1813,11 @@ void GameMode::Part1SceneA()
 
 	// Change background
 	backgroundScene.getComponent<SpriteComponent>().SetNewTexture("SherwoodForest1");
+
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_1A");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
 
 	// Place characters
 	robinHood.getComponent<SpriteComponent>().SetNewTexture("RobinSprite");
@@ -1611,6 +1852,11 @@ void GameMode::Part1SceneB()
 	// Update background scene
 	backgroundScene.getComponent<SpriteComponent>().SetNewTexture("BlueBoarInt");
 
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_1B");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
+
 	// Character management, if required
 
 	// Delete old entities and maps, Manage Puzzle
@@ -1641,6 +1887,11 @@ void GameMode::Part1SceneC()
 	// Update background scene
 	backgroundScene.getComponent<SpriteComponent>().SetNewTexture("SherwoodForest2");
 
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_1C");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
+
 	// Character management, if required
 
 	// Delete old entities and maps, Manage Puzzle
@@ -1668,6 +1919,11 @@ void GameMode::Part1SceneD()
 
 	// Update background scene
 	backgroundScene.getComponent<SpriteComponent>().SetNewTexture("ArcheryComp");
+
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_1D");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
 
 	// Character management, if required
 	npcOne.getComponent<SpriteComponent>().SetToggleDraw(false);
@@ -1704,6 +1960,11 @@ void GameMode::Part1SceneE()
 
 	// Update background scene
 	backgroundScene.getComponent<SpriteComponent>().SetNewTexture("HangmansNoose");
+
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_1E");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
 
 	// Character management, if required
 	npcOne.getComponent<SpriteComponent>().SetToggleDraw(true);
@@ -1742,6 +2003,11 @@ void GameMode::Part2SceneA()
 	// Update background scene
 	UpdateBackgroundScene("SherwoodForestRoad");
 
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_2A");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
+
 	// Character management, if required
 	npcOne.getComponent<SpriteComponent>().SetNewTexture("Butcher");
 	npcOne.getComponent<TransformComponent>().SetNewTransformPos(250.0f, 550.0f);
@@ -1772,6 +2038,11 @@ void GameMode::Part2SceneB()
 
 	// Update background scene
 	UpdateBackgroundScene("NottinghamSquare");
+
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_2B");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
 
 	// Character management, if required
 	npcOne.getComponent<SpriteComponent>().SetNewTexture("PeasantOne");
@@ -1806,6 +2077,11 @@ void GameMode::Part2SceneC()
 
 	// Update background scene
 	UpdateBackgroundScene("RobinsCamp");
+
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_2C");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
 
 	// Character management, if required
 	npcOne.getComponent<SpriteComponent>().SetNewTexture("Stutley");
@@ -1852,6 +2128,11 @@ void GameMode::Part3SceneA()
 	// Update background scene
 	UpdateBackgroundScene("SherwoodForest3");
 
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_3A");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
+
 	// Character management, if required
 	npcTwo.getComponent<SpriteComponent>().SetNewTexture("Scarlet");
 	sheriff.getComponent<SpriteComponent>().SetToggleDraw(false);
@@ -1889,6 +2170,11 @@ void GameMode::Part4SceneA()
 	// Update background scene
 	UpdateBackgroundScene("RobinFightsLJ");
 
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_4A");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
+
 	// Character management, if required
 
 	// Delete old entities and maps, Manage Puzzle
@@ -1916,6 +2202,11 @@ void GameMode::Part4SceneB()
 
 	// Update background scene
 	UpdateBackgroundScene("TheWedding");
+
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_4B");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
 
 	// Character management, if required
 
@@ -1950,6 +2241,11 @@ void GameMode::Part5SceneA()
 	// Update background scene
 	UpdateBackgroundScene("SherwoodForestB1");
 
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_5A");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
+
 	// Character management, if required
 
 	// Delete old entities and maps, Manage Puzzle
@@ -1983,6 +2279,11 @@ void GameMode::Part6SceneA()
 	// Update background scene
 	UpdateBackgroundScene("RoadToNottingham2");
 
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_6A");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
+
 	// Character management, if required
 
 	// Delete old entities and maps, Manage Puzzle
@@ -2009,6 +2310,11 @@ void GameMode::Part6SceneB()
 
 	// Update background scene
 	UpdateBackgroundScene("NottinghamOuter");
+
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_6B");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
 
 	// Character management, if required
 
@@ -2043,6 +2349,11 @@ void GameMode::Part7SceneA()
 	// Update background scene
 	UpdateBackgroundScene("ArcheryComp1");
 
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_7A");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
+
 	// Character management, if required
 
 	// Delete old entities and maps, Manage Puzzle
@@ -2052,14 +2363,14 @@ void GameMode::Part7SceneA()
 
 void GameMode::Part7SceneB()
 {
-	std::cout << "Part7SceneB()" << std::endl;
+	std::cout << "\nPart7SceneB()" << std::endl;
 
 	// Output Story Point
-	std::cout << "\nStory Point: After winning the archery competition, Robin is on the run from the King and his men. " << 
+	std::cout << "Story Point: After winning the archery competition, Robin is on the run from the King and his men. " << 
 		"Robin is looking for a place to hide." << std::endl;
 
 	// Set previous puzzle to solved
-	puzzleSysSevenB->SetPuzzleStatus(true);
+	puzzleSysSevenA->SetPuzzleStatus(true);
 
 	// Update story scene, and story part when required
 	SetStoryPart(7);
@@ -2070,6 +2381,11 @@ void GameMode::Part7SceneB()
 
 	// Update background scene
 	UpdateBackgroundScene("SherwoodForest2");
+
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_7B");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
 
 	// Character management, if required
 
@@ -2086,10 +2402,10 @@ void GameMode::Part7SceneB()
 
 void GameMode::Part8SceneA()
 {
-	std::cout << "Part8SceneA()" << std::endl;
+	std::cout << "\nPart8SceneA()" << std::endl;
 
 	// Output Story Point
-	std::cout << "\nStory Point: Guy of Gisbourne finds Robin in hiding in Sherwood Forest without realizing he found Robin. " <<
+	std::cout << "Story Point: Guy of Gisbourne finds Robin in hiding in Sherwood Forest without realizing he found Robin. " <<
 		"They engage in a friendly archery competition. Gisbourne shoots very well, but when Robin outshoots him, " <<
 		"Guy determines that he found Robin. A fight ensues, but Robin wins and kills Gisbourne. This is the first murder Robin " <<
 		"has commited since the ranger when he was 18. Robin takes Gisbourne's clothes to disguise hilmself." << std::endl;
@@ -2107,6 +2423,11 @@ void GameMode::Part8SceneA()
 	// Update background scene
 	UpdateBackgroundScene("SherwoodForest1");
 
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_8A");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
+
 	// Character management, if required
 
 	// Delete old entities and maps, Manage Puzzle
@@ -2116,10 +2437,10 @@ void GameMode::Part8SceneA()
 
 void GameMode::Part8SceneB()
 {
-	std::cout << "Part8SceneB()" << std::endl;
+	std::cout << "\nPart8SceneB()" << std::endl;
 
 	// Output Story Point
-	std::cout << "\nStory Point: After Little John saved 3 boys from the noose, he now requires saving himself. " <<
+	std::cout << "Story Point: After Little John saved 3 boys from the noose, he now requires saving himself. " <<
 		"Robin, disguised as Gisbourne, saves Little John from the noose." << std::endl;
 
 	// Set previous puzzle to solved
@@ -2134,6 +2455,11 @@ void GameMode::Part8SceneB()
 
 	// Update background scene
 	UpdateBackgroundScene("HangmansNoose");
+
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_8B");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
 
 	// Character management, if required
 
@@ -2150,10 +2476,10 @@ void GameMode::Part8SceneB()
 
 void GameMode::Part9SceneA()
 {
-	std::cout << "Part9SceneA()" << std::endl;
+	std::cout << "\nPart9SceneA()" << std::endl;
 
 	// Output Story Point
-	std::cout << "\nStory Point: After being a ranger for the King, Robin returns to Sherwood Forest. He ends up fighting and killing the Sheriff. " <<
+	std::cout << "Story Point: After being a ranger for the King, Robin returns to Sherwood Forest. He ends up fighting and killing the Sheriff. " <<
 		"The new sheriff and King agree to leave Robin and his men alone." << std::endl;
 
 	// Set previous puzzle to solved
@@ -2169,6 +2495,11 @@ void GameMode::Part9SceneA()
 	// Update background scene
 	UpdateBackgroundScene("PrologueScene");
 
+	// Update expoHintUI
+	expoHintUI.getComponent<SpriteComponent>().SetNewTexture("Expo_9A");
+	expoHintUI.getComponent<SpriteComponent>().SetToggleDraw(true);
+	SetExpoHintActive(true);
+
 	// Character management, if required
 
 	// Delete old entities and maps, Manage Puzzle
@@ -2181,7 +2512,15 @@ void GameMode::Part9SceneA()
 
 #pragma endregion Part9Loads
 
+void GameMode::GameStart()
+{
+	startEndUI.getComponent<SpriteComponent>().SetToggleDraw(false);
+	SetStartEndUIActive(false);
+}
+
 void GameMode::GameComplete()
 {
 	std::cout << "GGs Gamer. You completed the game. Now go touch some grass." << std::endl;
+	startEndUI.getComponent<SpriteComponent>().SetNewTexture("The_End");
+	startEndUI.getComponent<SpriteComponent>().SetToggleDraw(true);
 }

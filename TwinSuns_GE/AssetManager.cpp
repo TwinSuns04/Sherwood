@@ -12,7 +12,7 @@ AssetManager::~AssetManager()
 	
 }
 
-#pragma region TextureFontManagement
+#pragma region GeneralAssetManagement
 void AssetManager::AddTexture(std::string id, const char* path)
 {
 	texturesMap.emplace(id, TextureManager::LoadTexture(path));
@@ -33,7 +33,17 @@ TTF_Font* AssetManager::GetFont(std::string id)
 	return fontsMap[id];
 }
 
-#pragma endregion TextureFontManagement
+void AssetManager::AddExpositionElem(std::string id, const char* path)
+{
+	expositionMap.emplace(id, TextureManager::LoadTexture(path));
+}
+
+SDL_Texture* AssetManager::GetExpositionElem(std::string id)
+{
+	return expositionMap[id];
+}
+
+#pragma endregion GeneralAssetManagement
 
 // Create Base Puzzle Piece Entity, minimal components added
 void AssetManager::CreateBasePuzzlePiece(std::string id, int part, char scene, int num, bool last)
@@ -547,7 +557,7 @@ void AssetManager::DestroyPuzzlePieces(int part, char scene)
 			break;
 		}
 
-	case7:
+	case 7:
 		if (scene == 'A')
 		{
 			for (int i = 1; i < puzzleSevenA_IDs.size() + 1; i++)
@@ -724,7 +734,7 @@ std::unordered_map<int, std::string>* AssetManager::ClearPuzzleSysPieceMap(int p
 			break;
 		}
 
-	case7:
+	case 7:
 		if (scene == 'A')
 		{
 			tempMap1 = &puzzleSevenA_IDs;

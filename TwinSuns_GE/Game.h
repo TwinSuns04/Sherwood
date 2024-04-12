@@ -6,6 +6,7 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
+#include "SDL_mixer.h"
 #include <iostream>
 #include <vector>
 #include <list>
@@ -44,6 +45,8 @@ public:
 	void Render();
 	void Clean();
 	bool Running();
+	bool MediaLoader();
+	
 
 	// For future AddTile future implementation
 	static void AddTileFuture(int srcX, int srcy, int posX, int posY);
@@ -61,6 +64,7 @@ public:
 		groupColliders,
 		groupCharacterSprites,
 		groupUI,
+		groupUI_Top,
 		groupPuzzlePieces,
 	};
 
@@ -101,11 +105,25 @@ public:
 	char GetStoryScene();
 	void UpdateBackgroundScene(std::string sceneID);
 
+	void SetExpoHintActive(bool val);
+	bool GetExpoHintActive();
+
+	void SetStartEndUIActive(bool val);
+	bool GetStartEndUIActive();
+
 	bool PuzzleCollisionCheck();
 	void PuzzlePieceInteraction();
 
+	void HintRequestToggle();
+
+	void PlayBackgroundMusic();
+	void PauseBGMusic();
+	void ResumeBGMusic();
+	void StopBGMusic();
+
 	// Functions to update vars to correspond with story parts and scenes
 #pragma region LoadFunctions
+	void PrologueSceneA();
 	void PrologueSceneB();
 
 	void Part1SceneA();
@@ -136,6 +154,7 @@ public:
 
 	void Part9SceneA();
 
+	void GameStart();
 	void GameComplete();
 #pragma endregion LoadFunctions
 
@@ -146,14 +165,16 @@ public:
 	SDL_Texture* textTexture = nullptr;
 	SDL_Rect textRect;
 
+
+
 private:
 
 	// variables and objects
 	Entity* clickedPuzzlePiece;
 	
 	static int storyPart;
-	int storyPartOld;
-	int storyPartNew;
 	static char storyScene;
+	static bool expoHintActive;
+	static bool startEndUIActive;
 
 };
