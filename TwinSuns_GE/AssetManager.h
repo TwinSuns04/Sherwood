@@ -27,6 +27,10 @@ public:
 	void AddFont(std::string id, std::string path, int fontSize);
 	TTF_Font* GetFont(std::string id);
 
+	// Exposition Management
+	void AddExpositionElem(std::string id, const char* path);
+	SDL_Texture* GetExpositionElem(std::string id);
+
 	// Functions
 	void CreateBasePuzzlePiece(std::string id, int part, char scene, int num, bool last);
 	void AddEComponents(PuzzleSystem *puzzleSys, std::string id, int num);
@@ -39,8 +43,8 @@ public:
 	bool ClearPuzzlePieceMap(int part, char scene);
 	std::unordered_map<int, std::string>* ClearPuzzleSysPieceMap(int part, char scene);
 
-	int GetMapSize();
-	void GetMapElements();
+	int GetMapSize(); // For Debugging
+	void GetMapElements(); // For Debugging
 
 	// Scene loaders
 	void PuzzleZero_ALoad(PuzzleSystem *puzzleSys);
@@ -88,6 +92,9 @@ private:
 
 	// map to manage fonts
 	std::map<std::string, TTF_Font*> fontsMap;
+
+	 // map to manage exposition
+	std::map<std::string, SDL_Texture*> expositionMap;
 
 	// maps to manage puzzle pieces entity
 	std::map<std::string, Entity*> puzzlePieceMap;

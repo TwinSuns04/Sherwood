@@ -41,6 +41,11 @@ public:
 
 			case SDL_BUTTON_RIGHT:
 				//std::cout << "Right Click" << std::endl;
+				if (gameMode->GetExpoHintActive())
+				{
+					std::cout << "EpxoHintUI Active and Right Click" << std::endl;
+					gameMode->HintRequestToggle();
+				}
 				break;
 
 			default:
@@ -84,6 +89,10 @@ public:
 
 			case SDLK_SPACE:
 				std::cout << "SDLK_SPACE" << std::endl;
+				if (gameMode->GetStartEndUIActive())
+				{
+					gameMode->GameStart();
+				}
 				break;
 
 			case SDLK_ESCAPE:
@@ -91,6 +100,46 @@ public:
 				Game::isRunning = false;
 				break;
 
+			// Key for hint
+			case SDLK_h:
+				std::cout << "Hint Requested" << std::endl;
+				gameMode->HintRequestToggle();
+				break;
+
+			// Pause / Play music
+			case SDLK_m:
+				std::cout << "Pause / Play Music" << std::endl;
+
+				// no music playing
+				if (Mix_PlayingMusic() == 0) 
+				{
+					// Play music
+					gameMode->PlayBackgroundMusic();
+				}
+				// music is playing
+				else 
+				{
+					// If music is paused
+					if (Mix_PausedMusic() == 1)
+					{
+						gameMode->ResumeBGMusic();
+					}
+					// if music is playing
+					else
+					{
+						gameMode->PauseBGMusic();
+					}
+				}
+				break;
+
+			// Stop music altogether
+			case SDLK_n:
+				std::cout << "Stop Music" << std::endl;
+				gameMode->StopBGMusic();
+				break;
+
+			// Keys not in use
+			/*
 			case SDLK_l:
 				std::cout << "SDLK_l" << std::endl;
 				break;
@@ -98,6 +147,7 @@ public:
 			case SDLK_k:
 				std::cout << "SDLK_k" << std::endl;
 				break;
+			*/
 
 			case SDLK_0:
 				std::cout << "Debug" << std::endl;
